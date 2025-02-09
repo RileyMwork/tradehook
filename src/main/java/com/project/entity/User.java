@@ -56,28 +56,28 @@ public class User {
      * Properly named getters and setters are necessary for Jackson ObjectMapper to work. You may use them as well.
      * @return id
      */
-    public Integer getid() {
+    public Integer getId() {
         return id;
     }
     /**
      * Properly named getters and setters are necessary for Jackson ObjectMapper to work. You may use them as well.
      * @param id
      */
-    public void setid(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     /**
      * Properly named getters and setters are necessary for Jackson ObjectMapper to work. You may use them as well.
      * @return email
      */
-    public String getemail() {
+    public String getEmail() {
         return email;
     }
     /**
      * Properly named getters and setters are necessary for Jackson ObjectMapper to work. You may use them as well.
      * @param email
      */
-    public void setemail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
     /**
