@@ -10,6 +10,33 @@ import com.project.entity.User;
 
 public class UserDAO {
 
+    public User insertNewUser(User user) {
+        String sql = "INSERT INTO user (email, password, tradehookApiKey, alpacaApiKey, alpacaSecretKey) VALUES (?,?,?,?,?)";
+
+        try (Connection conn = DatabaseConnector.connect();
+            PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getTradehookApiKey());
+            ps.setString(4, user.getAlpacaApiKey());
+            ps.setString(5, user.getAlpacaSecretKey());
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                int generatedUserId = rs.getInt(1);
+                user.setId(generatedUserId); 
+                return user;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error creating user with email: " + user.getEmail() + ". " + e.getMessage());
+        }
+        return null;
+    }
+
     public List<User> selectAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM user";
@@ -88,33 +115,6 @@ public class UserDAO {
         }
     
         return user;
-    }
-
-    public User insertNewUser(User user) {
-        String sql = "INSERT INTO user (email, password, tradehookApiKey, alpacaApiKey, alpacaSecretKey) VALUES (?,?,?,?,?)";
-
-        try (Connection conn = DatabaseConnector.connect();
-            PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getTradehookApiKey());
-            ps.setString(4, user.getAlpacaApiKey());
-            ps.setString(5, user.getAlpacaSecretKey());
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-
-            if (rs.next()) {
-                int generatedUserId = rs.getInt(1);
-                user.setId(generatedUserId); 
-                return user;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error creating user with email: " + user.getEmail() + ". " + e.getMessage());
-        }
-        return null;
     }
 
     public void deleteUserById(int id) {
