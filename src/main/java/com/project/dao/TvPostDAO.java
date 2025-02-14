@@ -116,7 +116,7 @@ public class TvPostDAO {
             System.out.println(rowsAffected + " TvPosts Deleted for user with id: " + userId);
 
         } catch (SQLException e) {
-            System.err.println("Error deleting TvPost: " + e.getMessage());
+            System.err.println("Error deleting TvPosts: " + e.getMessage());
         }
     }
 
