@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+</head>
+<body>
+    <h1 th:text="'HELLO THERE, ' + ${userName}">HELLO THERE</h1>
+    <!-- This will dynamically display "HELLO THERE, <userName>" if a 'userName' attribute is passed to the view -->
+
+    <form th:action="@{/register}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" th:value="${username}"/>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" th:value="${password}"/>
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

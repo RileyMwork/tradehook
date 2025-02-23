@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.entity.User;
+import com.project.exception.EmailIsTakenException;
+import com.project.exception.EmailOrPasswordTooLongException;
+import com.project.exception.EmailOrPasswordTooShortException;
 import com.project.repository.UserRepository;
 
 @Service
@@ -22,14 +25,18 @@ public class UserService {
     }
 
     public User createNewUser(User newUser) {
-        if (checkEmailAndPasswordLength(newUser)) {
-            if (checkEmailIsUnique(newUser)) {
-                return userRepository.save(newUser); // Direct save using JpaRepository
+        if (checkIfEmailOrPasswordIsTooShort(newUser)) {
+            if (checkIfEmailOrPasswordIsTooLong(newUser)) {
+                if (checkEmailIsUnique(newUser)) {
+                    return userRepository.save(newUser);
+                } else {
+                    throw new EmailIsTakenException("Email is taken");
+                }
             } else {
-                return null;
+                throw new EmailOrPasswordTooLongException("Email or Password too Long");
             }
         } else {
-            return null;
+            throw new EmailOrPasswordTooShortException("Email or Password too short!");
         }
     }
 
@@ -43,6 +50,14 @@ public class UserService {
         String newUserPassword = newUser.getPassword();
         return newUserEmail.length() > 6 && newUserEmail.length() <= 24
             && newUserPassword.length() > 6 && newUserPassword.length() <= 24;
+    }
+
+    private boolean checkIfEmailOrPasswordIsTooShort(User newUser) {
+        return newUser.getEmail().length() > 6 && newUser.getPassword().length() > 6;
+    }
+
+    private boolean checkIfEmailOrPasswordIsTooLong(User newUser) {
+        return newUser.getEmail().length() <= 24 && newUser.getPassword().length() <= 24;
     }
 
     public User login(User loginUser) {
