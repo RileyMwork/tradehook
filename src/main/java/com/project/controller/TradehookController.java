@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.project.entity.User;
 import com.project.exception.EmailIsTakenException;
 import com.project.exception.EmailOrPasswordTooLongException;
@@ -33,16 +35,23 @@ public class TradehookController {
         return "register"; // This corresponds to the 'register.html' template
     }
 
+    @GetMapping("/home")
+    public String homeForm() {
+        // You can add data to the model if you want dynamic content in the view
+        return "home"; // This corresponds to the 'register.html' template
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody User user) {
         try {
-            User newUser = userService.createNewUser(user);
+            userService.createNewUser(user);
         } catch (EmailOrPasswordTooShortException | EmailOrPasswordTooLongException | EmailIsTakenException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
         return ResponseEntity.status(200).body("New User Created!");
-
     }
+
+
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> displayUsers() {

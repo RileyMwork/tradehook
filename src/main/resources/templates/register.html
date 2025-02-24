@@ -3,20 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Correctly using Thymeleaf's syntax for static resources -->
+    <link th:href="@{/css/register.css}" rel="stylesheet" type="text/css" />
     <title>Registration Page</title>
+    <!-- Link to your register.js file -->
 </head>
+
 <body>
-    <h1 th:text="'HELLO THERE, ' + ${userName}">HELLO THERE</h1>
-    <!-- This will dynamically display "HELLO THERE, <userName>" if a 'userName' attribute is passed to the view -->
+    <!-- Header section -->
+    <header id="registration-header-container" class="header-container">
+        <button class="button" data-text="Awesome">
+            <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
+            <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
+        </button>
+    </header>
 
-    <form th:action="@{/register}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" th:value="${username}"/>
+    <!-- Main content for registration -->
+    <main id="registration-container">
+        <h1 class="main-header" id="registration-header">Create New Account</h1>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" th:value="${password}"/>
+        <!-- Thymeleaf Form (Note: remove the 'id' attributes that are conflicting with Thymeleaf) -->
+        <form class="form" id="registration-form" th:action="@{/register}" method="post">
+            <input id="email-input" class="form-input" type="email" autocomplete="off" placeholder="Email" name="email" th:value="${email}" required />
+        
+            <input id="password-input" class="form-input" type="password" autocomplete="off" placeholder="Password" name="password" th:value="${password}" required />
+        
+            <input id="confirm-password-input" class="form-input" type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword" required />
+        
+            <button id="registration-button" class="button submit-button" type="submit">Register</button>
+        </form>
+        <p id="registration-page-login-redirect">Already have an account? <a id="login-link" href="#">Login</a></p>
+    </main>
 
-        <button type="submit">Register</button>
-    </form>
+    <!-- External JS file for validation -->
+    <script th:src="@{/js/register.js}"></script>
 </body>
 </html>
