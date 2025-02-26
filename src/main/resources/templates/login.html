@@ -5,38 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Correctly using Thymeleaf's syntax for static resources -->
-    <link th:href="@{/css/register.css}" rel="stylesheet" type="text/css" />
-    <title>Registration Page</title>
-    <!-- Link to your register.js file -->
+    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="login.css">
+    <title>Login Page</title>
+    <!-- Link to your login.js file -->
 </head>
 
 <body>
     <!-- Header section -->
-    <header id="registration-header-container" class="header-container">
+    <header id="login-header-container" class="header-container">
         <button class="button" data-text="Awesome">
             <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
             <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
         </button>
     </header>
 
-    <!-- Main content for registration -->
-    <main id="registration-container">
-        <h1 class="main-header" id="registration-header">Create New Account</h1>
+    <!-- Main content for login -->
+    <main id="login-container">
+        <h1 class="main-header" id="login-header">Login to Your Account</h1>
 
         <!-- Thymeleaf Form (Note: remove the 'id' attributes that are conflicting with Thymeleaf) -->
-        <form class="form" id="registration-form" th:action="@{/register}" method="post">
+        <form class="form" id="login-form" th:action="@{/login}" method="post">
             <input id="email-input" class="form-input" type="email" autocomplete="off" placeholder="Email" name="email" th:value="${email}" required />
         
             <input id="password-input" class="form-input" type="password" autocomplete="off" placeholder="Password" name="password" th:value="${password}" required />
         
-            <input id="confirm-password-input" class="form-input" type="password" autocomplete="off" placeholder="Confirm Password" name="confirmPassword" required />
-        
-            <button id="registration-button" class="button submit-button" type="submit">Register</button>
+            <button id="login-button" class="button submit-button" type="submit">Login</button>
         </form>
-        <p id="registration-page-login-redirect">Already have an account? <a id="login-link" href="http://localhost:8080/login">Login</a></p>
+        <p id="login-page-register-redirect">Don't have an account? <a id="register-link" href="http://localhost:8080/register">Register</a></p>
     </main>
 
     <!-- External JS file for validation -->
-    <script th:src="@{/js/register.js}"></script>
+    <script th:src="@{/js/login.js}"></script>
 </body>
 </html>

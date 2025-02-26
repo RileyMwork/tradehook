@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.entity.User;
+import com.project.exception.EmailAndPasswordDoesNotMatch;
 import com.project.exception.EmailIsTakenException;
 import com.project.exception.EmailOrPasswordTooLongException;
 import com.project.exception.EmailOrPasswordTooShortException;
@@ -64,8 +65,9 @@ public class UserService {
         Optional<User> userOpt = userRepository.findByEmail(loginUser.getEmail());
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(loginUser.getPassword())) {
             return userOpt.get();
+        } else {
+            throw new EmailAndPasswordDoesNotMatch("Email or Password does not match!");
         }
-        return null;
     }
 
     public User selectUserById(int id){
