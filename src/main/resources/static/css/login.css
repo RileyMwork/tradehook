@@ -36,14 +36,14 @@ html, body {
   /* overflow: hidden; */
 }
 
-#registration-header-container {
+#login-header-container {
     display: grid;
     align-items: center;
     justify-content: center;
     /* margin-top: 20px; */
 }
 
-#registration-header {
+#login-header {
     font-size: calc(0.5rem + 2vw);
 }
 
@@ -95,7 +95,7 @@ html, body {
     filter: drop-shadow(0 0 23px var(--animation-color))
 }
 
-#registration-container {
+#login-container {
     background-color: white;
     border-radius: 20px;
     margin-top: 8vh;
@@ -106,12 +106,12 @@ html, body {
     justify-items: center;
     align-items: center;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 3fr 10dvh;
+    grid-template-rows: 1fr 2fr 8dvh;
     position: relative;
     font-family: 'MyCustomFont', sans-serif;
 }
 
-#registration-form {
+#login-form {
     font-family: 'MyCustomFont', sans-serif;
     display: grid;
     /* row-gap: 3vh; */
@@ -119,7 +119,7 @@ html, body {
     align-items: center;
     grid-template-columns: 1fr;
     grid-template-columns: 1fr ;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-row: 2 / 3;
     width: 100%;
     position: relative;
@@ -133,17 +133,13 @@ html, body {
     grid-row: 2 / 3;
 }
 
-#confirm-password-input {
-    grid-row: 3 / 4;
-}
-
 .form-input {
     font-family: 'MyCustomFont', sans-serif;
-    position: absolute;
+    /* position: absolute; */
     border: none;
     outline: none;
     border-radius: 15px;
-    padding: 1em;
+    padding: 1rem;
     background-color: #ccc;
     box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
     transition: 300ms ease-in-out;
@@ -165,8 +161,8 @@ html, body {
 }
 
 /* From Uiverse.io by cssbuttons-io */ 
-#registration-button {
-    grid-row: 4 / 5;
+#login-button {
+    grid-row: 3 / 4;
     position: relative;
     margin-bottom: 20px;
     padding: 1.3em 3em;
@@ -183,7 +179,7 @@ html, body {
     outline: none;
 }
 
-#registration-button:hover {
+#login-button:hover {
     background-color: white;
     box-shadow: 0px 15px 20px #37FF8B;
     color: #007d34;
@@ -191,22 +187,22 @@ html, body {
     transform: translateY(-7px);
 }
 
-#registration-button:active {
+#login-button:active {
     transform: translateY(-1px);
 }
 
-#registration-page-login-redirect {
+#login-page-register-redirect {
     /* margin-top: 7vh; */
     font-size: 0.75rem;
 }
 
-#login-link {
+#register-link {
     text-decoration: none;
     color: #8f8f8f;
     transition: all 0.3s;
 }
 
-#login-link:hover {
+#register-link:hover {
     color: #37FF8B;
     font-size: 1rem;
 }

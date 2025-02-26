@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.project.entity.User;
 import com.project.exception.EmailIsTakenException;
+import com.project.exception.EmailAndPasswordDoesNotMatch;
 import com.project.exception.EmailOrPasswordTooLongException;
 import com.project.exception.EmailOrPasswordTooShortException;
 import com.project.service.APostService;
@@ -33,6 +33,22 @@ public class TradehookController {
     public String registerForm() {
         // You can add data to the model if you want dynamic content in the view
         return "register"; // This corresponds to the 'register.html' template
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        // You can add data to the model if you want dynamic content in the view
+        return "login"; // This corresponds to the 'register.html' template
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        try {
+            userService.login(user);
+        } catch (EmailAndPasswordDoesNotMatch e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        return ResponseEntity.status(200).body("Login Successful");
     }
 
     @GetMapping("/home")
