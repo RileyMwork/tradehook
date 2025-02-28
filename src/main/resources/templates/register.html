@@ -23,6 +23,11 @@
     <main id="registration-container">
         <h1 class="main-header" id="registration-header">Create New Account</h1>
 
+        <!-- Display the error message if it exists -->
+        <div th:if="${error}" style="color: red; font-weight: bold; padding: 10px; background-color: #f8d7da; border: 1px solid red;">
+            <p th:text="${error}"></p>
+        </div>
+
         <!-- Thymeleaf Form (Note: remove the 'id' attributes that are conflicting with Thymeleaf) -->
         <form class="form" id="registration-form" th:action="@{/register}" method="post">
             <input id="email-input" class="form-input" type="email" autocomplete="off" placeholder="Email" name="email" th:value="${email}" required />

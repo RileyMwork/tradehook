@@ -2,8 +2,10 @@ package com.project.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.project.entity.User;
 import com.project.exception.EmailAndPasswordDoesNotMatch;
 import com.project.exception.EmailIsTakenException;
@@ -107,21 +109,42 @@ public class UserService {
         return null;
     }
 
-    public User updateUserTradehookApiKey(User user, String newTradehookApiKey) {
-        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-        if (existingUserOpt.isPresent()) {
-            int id = existingUserOpt.get().getId();
-            return userRepository.updateUserTradehookApiKey(id, newTradehookApiKey).orElse(null);
-        }
-        return null;
+    public User selectUserByTradehookApiKey(String tradehookApiKey) {
+        return userRepository.findByTradehookApiKey(tradehookApiKey).get();
     }
 
-    public User updateUserAlpacaApiKeys(User user, String newAlpacaApiKey, String newAlpacaSecretKey) {
-        Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-        if (existingUserOpt.isPresent()) {
-            int id = existingUserOpt.get().getId();
-            return userRepository.updateUserAlpacaApiKeys(id, newAlpacaApiKey, newAlpacaSecretKey).orElse(null);
+    @Transactional
+    public User updateTradehookApiKey(User user) {
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User ID cannot be null when updating the API key.");
         }
-        return null;
+        String newApiKey = UUID.randomUUID().toString();
+    
+        // Update the tradehookApiKey for the user in the database
+        int updated = userRepository.updateTradehookApiKey(user.getId(), newApiKey);
+        if (updated == 0) {
+            throw new RuntimeException("User not found with id: " + user.getId());  // User not found in the DB
+        }
+        User updatedUser = new User(user.getId(),user.getEmail(),user.getPassword(),newApiKey,user.getAlpacaApiKey(),user.getAlpacaSecretKey());
+        return  updatedUser;
     }
+
+    @Transactional
+    public User updateAlpacaApiKeys(User user,String alpacaApiKey,String alpacaSecretKey) {
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User ID cannot be null when updating the API key.");
+        }
+
+        int updated = userRepository.updateAlpacaApiKeys(user.getId(), alpacaApiKey, alpacaSecretKey);
+        if (updated == 0) {
+            throw new RuntimeException("User not found with id: " + user.getId());  // User not found in the DB
+        }
+        User updatedUser = new User(user.getId(),user.getEmail(),user.getPassword(),user.getTradehookApiKey(),alpacaApiKey,alpacaSecretKey);
+        return updatedUser;
+    }
+
 }
+
+
+
+

@@ -5,9 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
 </head>
+
+<header id="home-header-container" class="header-container">
+    <button class="button" data-text="Awesome">
+        <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
+        <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
+    </button>
+</header>
+
 <body>
-    <h1>Home</h1>
-    <!-- This will dynamically display "HELLO THERE, <userName>" if a 'userName' attribute is passed to the view -->
+    <div>
+        <!-- Display user email -->
+        <h2>Welcome, <span th:text="${user != null ? user.email : 'Guest'}"></span></h2>
+
+        <!-- Display success message if it exists -->
+        <div th:if="${message}" class="alert alert-success">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- Display error message if it exists -->
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+
+        <!-- Display the Tradehook API Key -->
+        <div>
+            <h3>Your Tradehook API Key:</h3>
+            <p th:text="${tradehookApiKey != null ? tradehookApiKey : 'No Tradehook Api Key'}"></p>
+        </div>
+
+        <!-- Form to Generate Tradehook API Key -->
+        <h2>Generate Tradehook API Key</h2>
+        <form th:action="@{/updateTradehookApiKey}" method="POST">
+            <button type="submit">Generate New Tradehook API Key</button>
+        </form>
         
+    </div>
+
+    <div>
+        <h3>Your Alpaca Api Keys:</h3>
+        <p th:text="${alpacaApiKey != null ? alpacaApiKey : 'No Alpaca Api Key'}"></p>
+        <p th:text="${alpacaSecretKey != null ? alpacaSecretKey : 'No Alpaca Secret Key'}"></p>
+    </div>
+
+    <div>
+        <!-- Form to Update Alpaca API Keys -->
+        <h2>Update Alpaca API Keys</h2>
+        <form th:action="@{/updateAlpacaApiKeys}" method="POST">
+            <label for="alpacaApiKey">Alpaca API Key:</label>
+            <input type="text" id="alpacaApiKey" name="alpacaApiKey" required><br>
+
+            <label for="alpacaSecretKey">Alpaca Secret Key:</label>
+            <input type="text" id="alpacaSecretKey" name="alpacaSecretKey" required><br>
+
+            <button type="submit">Update Alpaca API Keys</button>
+        </form>
+    </div>
 </body>
 </html>
