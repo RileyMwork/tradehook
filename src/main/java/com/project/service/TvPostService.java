@@ -16,6 +16,10 @@ public class TvPostService {
         this.tvPostRepository = tvPostRepository;
     }
 
+    public List<TvPost> selectAllTvPosts() {
+        return tvPostRepository.selectAllTvPosts();
+    }
+
     // Create a new TvPost
     public TvPost createNewTvPost(TvPost tvPost) {
         return tvPostRepository.save(tvPost); // Uses JpaRepository to save the entity

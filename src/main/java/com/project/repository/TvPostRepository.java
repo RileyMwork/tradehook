@@ -12,6 +12,10 @@ public interface TvPostRepository extends JpaRepository<TvPost, Integer> {
     // Custom query to select all TvPosts by userId
     List<TvPost> findByUserId(int userId);
 
+    default List<TvPost> selectAllTvPosts() {
+        return findAll();
+    }
+
     // Custom query to find a TvPost by id (this method is already available in JpaRepository)
     Optional<TvPost> findById(int id);
 
