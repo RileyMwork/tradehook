@@ -12,6 +12,8 @@ public class Order {
 
     private Integer userId;
 
+    private String ticker;
+
     private Timestamp createdAt;
 
     private Timestamp filledAt;
@@ -29,8 +31,10 @@ public class Order {
     public Order() {
     }
 
-    public Order(Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
+    public Order(Integer userId, String ticker, Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
                 String orderType, String side, String commission) {
+        this.userId = userId;
+        this.ticker = ticker;
         this.createdAt = createdAt;
         this.filledAt = filledAt;
         this.filledQty = filledQty;
@@ -40,9 +44,11 @@ public class Order {
         this.commission = commission;
     }
 
-    public Order(Integer id, Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
+    public Order(Integer id, Integer userId, String ticker, Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
                 String orderType, String side, String commission) {
         this.id = id;
+        this.userId = userId;
+        this.ticker = ticker;
         this.createdAt = createdAt;
         this.filledAt = filledAt;
         this.filledQty = filledQty;
@@ -66,6 +72,14 @@ public class Order {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getTicker() {
+        return ticker;
+    }
+
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
     }
 
     public Timestamp getCreatedAt() {
@@ -132,6 +146,7 @@ public class Order {
         Order other = (Order) obj;
 
         if (userId != other.userId) return false;
+        if (ticker != null ? !ticker.equals(other.ticker) : other.ticker != null) return false;
         if (id != null ? !id.equals(other.id) : other.id != null) return false;
         if (createdAt != null ? !createdAt.equals(other.createdAt) : other.createdAt != null) return false;
         if (filledAt != null ? !filledAt.equals(other.filledAt) : other.filledAt != null) return false;
@@ -148,6 +163,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", ticker='" + ticker + '\'' +
                 ", createdAt=" + createdAt +
                 ", filledAt=" + filledAt +
                 ", filledQty='" + filledQty + '\'' +
