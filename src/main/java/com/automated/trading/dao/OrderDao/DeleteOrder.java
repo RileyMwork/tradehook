@@ -45,5 +45,24 @@ public class DeleteOrder {
         }
     }
 
+    public Integer DeleteOrderByUserIdAndTicker(int userId, String ticker) {
+        String sql = "Delete FROM Order_ WHERE userId = ? AND ticker = ?";
+        try (Connection conn = databaseConnector.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, ticker);
+
+            Integer result = pstmt.executeUpdate();
+            return result;
+            
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+
 
 }

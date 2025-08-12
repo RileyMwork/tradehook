@@ -110,4 +110,35 @@ public class SelectOrder {
         }
     }
 
+    public List<Order> selectAllOrdersByUserIdAndTickerAndSide(Integer userId,String ticker, String side) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM Order_ WHERE userId = ? AND ticker = ? AND side = ? ORDER BY filledAt DESC";
+        try (Connection conn = databaseConnector.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, ticker);
+            pstmt.setString(3, side);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                Timestamp createdAt = rs.getTimestamp(4);
+                Timestamp filledAt = rs.getTimestamp(5);
+                String filledQty = rs.getString(6);
+                String filledAvgPrice = rs.getString(7);
+                String orderType = rs.getString(8);
+                String commission = rs.getString(10);
+
+                Order order = new Order(id,userId,ticker,createdAt,filledAt,filledQty,filledAvgPrice,orderType,side,commission);
+                orders.add(order);
+                
+            }
+            return orders;
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
 }
