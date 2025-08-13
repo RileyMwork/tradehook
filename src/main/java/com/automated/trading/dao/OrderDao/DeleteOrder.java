@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.DeleteOrderDaoNoOrderToDeleteException;
 import com.automated.trading.util.DatabaseConnector;
 
 @Component
@@ -20,6 +22,9 @@ public class DeleteOrder {
             pstmt.setInt(1, id);
 
             Integer result = pstmt.executeUpdate();
+            if (result == 0) {
+                throw new DeleteOrderDaoNoOrderToDeleteException("No Order To Delete With ID: " + id);
+            }
             return result;
             
             
@@ -36,6 +41,9 @@ public class DeleteOrder {
             pstmt.setInt(1, userId);
 
             Integer result = pstmt.executeUpdate();
+            if (result == 0) {
+                throw new DeleteOrderDaoNoOrderToDeleteException("No Orders To Delete With UserID: " + userId);
+            }
             return result;
             
             
@@ -53,6 +61,9 @@ public class DeleteOrder {
             pstmt.setString(2, ticker);
 
             Integer result = pstmt.executeUpdate();
+            if (result == 0) {
+                throw new DeleteOrderDaoNoOrderToDeleteException("No Order To Delete With UserID: " + userId + " And Ticker: " + ticker);
+            }
             return result;
             
             

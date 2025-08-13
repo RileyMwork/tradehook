@@ -1,4 +1,4 @@
-package com.automated.trading.dao.UserDao;
+package com.automated.trading.dao.UserDaoTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.automated.trading.dao.UserDao.DeleteUser;
+import com.automated.trading.dao.UserDao.InsertUser;
+import com.automated.trading.dao.UserDao.SelectUser;
+import com.automated.trading.dao.UserDao.UpdateUser;
 import com.automated.trading.model.User;
 
 @SpringBootTest
@@ -23,18 +27,15 @@ public class UpdateUserTests {
 
     @Test
     public void testUpdateUserReturnsOneAndUpdatesFields() {
-        // Step 1: Insert a user to update
         String originalEmail = "updateTest@email.com";
         String originalPassword = "originalPassword";
         User userToInsert = new User(originalEmail, originalPassword);
         Integer inserted = insertUser.insertUser(userToInsert);
         assertEquals(1, inserted);
 
-        // Retrieve inserted user to get generated id
         User user = selectUser.selectUserByEmail(originalEmail);
         assertNotNull(user);
 
-        // Step 2: Update fields
         user.setEmail("updatedEmail@email.com");
         user.setPassword("updatedPassword");
         user.setTradehookApiKey("updatedTradehookApiKey");
@@ -44,7 +45,6 @@ public class UpdateUserTests {
         Integer updated = updateUser.updateUser(user);
         assertEquals(1, updated);
 
-        // Step 3: Verify update
         User updatedUser = selectUser.selectUserById(user.getId());
         assertNotNull(updatedUser);
         assertEquals("updatedEmail@email.com", updatedUser.getEmail());
@@ -52,6 +52,11 @@ public class UpdateUserTests {
         assertEquals("updatedTradehookApiKey", updatedUser.getTradehookApiKey());
         assertEquals("updatedAlpacaApiKey", updatedUser.getAlpacaApiKey());
         assertEquals("updatedAlpacaSecretKey", updatedUser.getAlpacaSecretKey());
+    }
+
+    @Test
+    public void updateUserThrowsNullExceptionWhenAttributeIsNull() {
+        assertThrows(NullPointerException.class, () -> updateUser.updateUser(null));
     }
 
     @AfterAll
