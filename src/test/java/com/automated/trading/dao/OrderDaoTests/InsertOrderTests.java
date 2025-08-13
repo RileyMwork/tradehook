@@ -1,4 +1,4 @@
-package com.automated.trading.dao.OrderDao;
+package com.automated.trading.dao.OrderDaoTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Timestamp;
@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.automated.trading.dao.OrderDao.DeleteOrder;
+import com.automated.trading.dao.OrderDao.InsertOrder;
+import com.automated.trading.dao.OrderDao.SelectOrder;
 import com.automated.trading.model.Order;
 
 @SpringBootTest
@@ -29,6 +33,11 @@ public class InsertOrderTests {
         assertEquals(1, result);
         assertNotNull(selected);
         assertEquals("INSERT", selected.get(0).getTicker());
+    }
+
+    @Test 
+    public void insertOrderThrowsNullExceptionWhenParameterIsNull() {
+        assertThrows(NullPointerException.class, () -> insertOrder.insertOrder(null));
     }
 
     @AfterAll

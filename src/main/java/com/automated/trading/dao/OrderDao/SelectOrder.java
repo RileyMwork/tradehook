@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.SelectOrderDaoNoOrderFoundException;
 import com.automated.trading.model.Order;
 import com.automated.trading.util.DatabaseConnector;
 
@@ -41,6 +43,9 @@ public class SelectOrder {
                 orders.add(order);
                 
             }
+            if (orders.size() == 0) {
+                throw new SelectOrderDaoNoOrderFoundException("No Orders In Database");
+            }
             return orders;
             
         } catch (SQLException e) {
@@ -70,6 +75,9 @@ public class SelectOrder {
 
                 order = new Order(id,userId,ticker,createdAt,filledAt,filledQty,filledAvgPrice,orderType,side,commission);
                 
+            }
+            if (order == null) {
+                throw new SelectOrderDaoNoOrderFoundException("No Orders Found With ID: " + id);
             }
             return order;
 
@@ -102,6 +110,9 @@ public class SelectOrder {
                 orders.add(order);
                 
             }
+            if (orders.size() == 0) {
+                throw new SelectOrderDaoNoOrderFoundException("No Orders Found With UserID: " + userId + " And Ticker: " + ticker);
+            }
             return orders;
             
         } catch (SQLException e) {
@@ -132,6 +143,9 @@ public class SelectOrder {
                 Order order = new Order(id,userId,ticker,createdAt,filledAt,filledQty,filledAvgPrice,orderType,side,commission);
                 orders.add(order);
                 
+            }
+            if (orders.size() == 0) {
+                throw new SelectOrderDaoNoOrderFoundException("No Orders Found With UserID: " + userId + " And Ticker: " + ticker + " And Side: " + side);
             }
             return orders;
             

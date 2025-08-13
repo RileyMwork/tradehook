@@ -1,4 +1,4 @@
-package com.automated.trading.dao.OrderDao;
+package com.automated.trading.dao.OrderDaoTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.automated.trading.dao.OrderDao.DeleteOrder;
+import com.automated.trading.dao.OrderDao.InsertOrder;
+import com.automated.trading.dao.OrderDao.SelectOrder;
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.SelectOrderDaoNoOrderFoundException;
 import com.automated.trading.model.Order;
 
 @SpringBootTest
@@ -76,6 +81,26 @@ public class SelectOrderTests {
         assertTrue(orders.size() == 2);
         System.out.println(orders);
         assertTrue(orders.get(0).getFilledAt().compareTo(orders.get(1).getFilledAt()) > 0);
+    }
+
+    @Test 
+    public void selectOrderThrowsExceptionWhenNoOrderIsFoundById() {
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectOrderById(10000000));
+    }
+
+    @Test 
+    public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserId() {
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1000000));
+    }
+
+    @Test 
+    public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTicker() {
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(10000000, "NULLTICKER"));
+    }
+
+    @Test 
+    public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTickerAndSide() {
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerAndSide(10000000, "NULLTICKER", "buy"));
     }
 
     @AfterAll

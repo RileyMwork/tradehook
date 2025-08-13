@@ -1,13 +1,15 @@
-package com.automated.trading.dao.OrderDao;
+package com.automated.trading.dao.OrderDaoTests;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import com.automated.trading.dao.OrderDao.DeleteOrder;
+import com.automated.trading.dao.OrderDao.InsertOrder;
+import com.automated.trading.dao.OrderDao.SelectOrder;
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.DeleteOrderDaoNoOrderToDeleteException;
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.SelectOrderDaoNoOrderFoundException;
 import com.automated.trading.model.Order;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,15 @@ public class DeleteOrderTests {
 
     @AfterEach
     void cleanup() {
-        deleteOrder.DeleteOrderByUserId(1);
-        deleteOrder.DeleteOrderByUserId(2);
+        try {
+            deleteOrder.DeleteOrderByUserId(1);
+        } catch (DeleteOrderDaoNoOrderToDeleteException ignored) {}
+    
+        try {
+            deleteOrder.DeleteOrderByUserId(2);
+        } catch (DeleteOrderDaoNoOrderToDeleteException ignored) {}
     }
+
 
     @Test
     public void deleteOrderByIdDeletesSingleOrder() {
@@ -65,17 +73,28 @@ public class DeleteOrderTests {
     public void deleteOrderByUserIdDeletesAllOrdersForUser() {
         int deletedCount = deleteOrder.DeleteOrderByUserId(1);
         assertEquals(2, deletedCount);
-
-        List<Order> remainingOrders = selectOrder.selectAllOrdersByUserId(1);
-        assertTrue(remainingOrders.isEmpty());
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1));
     }
 
     @Test
     public void deleteOrderByUserIdAndTickerDeletesOnlyMatchingOrders() {
         int deletedCount = deleteOrder.DeleteOrderByUserIdAndTicker(1, "DELTEST");
         assertEquals(2, deletedCount);
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1));
+    }
 
-        List<Order> remainingOrders = selectOrder.selectAllOrdersByUserId(1);
-        assertTrue(remainingOrders.isEmpty());
+    @Test 
+    public void deleteOrderThrowsExceptionWhenNoOrderIsFoundById() {
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderById(1000000));
+    }
+
+    @Test 
+    public void deleteOrderThrowsExceptionWhenNoOrderIsFoundByUserId() {
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderByUserId(1000000));
+    }
+
+    @Test 
+    public void deleteOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTicker() {
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderByUserIdAndTicker(1000000,"NULLTICKER"));
     }
 }

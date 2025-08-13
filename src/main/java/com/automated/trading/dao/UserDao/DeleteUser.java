@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.automated.trading.exception.daoexceptions.userdaoexceptions.DeleteUserDaoNoUserToDelete;
 import com.automated.trading.util.DatabaseConnector;
 
 @Component
 public class DeleteUser {
     
     @Autowired
-    private DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector;
 
     public Integer DeleteUserById(int id) {
         String sql = "DELETE FROM User WHERE id = ?";
@@ -19,6 +21,9 @@ public class DeleteUser {
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             Integer result = pstmt.executeUpdate();
+            if (result == 0) {
+                throw new DeleteUserDaoNoUserToDelete("No User To Delete With ID: " + id);
+            }
             return result;
             
             
@@ -34,6 +39,9 @@ public class DeleteUser {
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             Integer result = pstmt.executeUpdate();
+            if (result == 0) {
+                throw new DeleteUserDaoNoUserToDelete("No User To Delete With Email: " + email);
+            }
             return result;
             
             
