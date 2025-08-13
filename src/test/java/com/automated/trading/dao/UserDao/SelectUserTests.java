@@ -48,6 +48,19 @@ public class SelectUserTests {
         assertEquals(insertedUser.getId(), found.getId());
     }
 
+    @Test
+    public void testSelectEmailByEmailReturnsCorrectEmail() {
+        String foundEmail = selectUser.selectUserEmailByEmail(insertedUser.getEmail());
+        assertEquals(insertedUser.getEmail(), foundEmail);
+    }
+
+    @Test
+    public void testSelectEmailByEmailReturnsNullIfEmailDoesNotExist() {
+        String nullEmail = "ThisEmailDoesNotExist@nullemail.com";
+        String foundEmail = selectUser.selectUserEmailByEmail(nullEmail);
+        assertEquals(null, foundEmail);
+    }
+
     @AfterAll
     public static void cleanup(@Autowired DeleteUser deleteUser) {
         deleteUser.DeleteUserByEmail("selectTest@test.com");
