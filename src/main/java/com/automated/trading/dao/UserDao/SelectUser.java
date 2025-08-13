@@ -98,4 +98,22 @@ public class SelectUser {
         }
     }
 
+    public String selectUserEmailByEmail(String email) {
+        String sql = "SELECT email FROM User WHERE email = ?";
+        try (Connection conn = databaseConnector.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+
+            ResultSet rs = pstmt.executeQuery();
+            String fetchedEmail = rs.getString(1);
+            
+            return fetchedEmail;
+
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
 }
