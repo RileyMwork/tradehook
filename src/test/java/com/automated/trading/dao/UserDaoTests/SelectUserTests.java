@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import com.automated.trading.dao.UserDao.DeleteUser;
 import com.automated.trading.dao.UserDao.InsertUser;
 import com.automated.trading.dao.UserDao.SelectUser;
-import com.automated.trading.exception.daoexceptions.userdaoexceptions.SelectUserDaoNoUsersFoundException;
 import com.automated.trading.model.User;
 
 @SpringBootTest
@@ -59,15 +57,8 @@ public class SelectUserTests {
         assertEquals(insertedUser.getEmail(), foundEmail);
     }
 
-    @Test
-    public void selectEmailByEmailThrowsNoUsersFoundException() {
-        String nullEmail = "ThisEmailDoesNotExist@nullemail.com";
-        assertThrows(SelectUserDaoNoUsersFoundException.class, 
-                    () -> selectUser.selectUserByEmail(nullEmail));
-    }
-
     @AfterAll
     public static void cleanup(@Autowired DeleteUser deleteUser) {
-        deleteUser.DeleteUserByEmail("selectTest@test.com");
+        deleteUser.deleteUserByEmail("selectTest@test.com");
     }
 }

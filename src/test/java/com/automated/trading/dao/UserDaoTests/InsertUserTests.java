@@ -64,7 +64,7 @@ public class InsertUserTests {
 
     @AfterAll
     public static void cleanup(@Autowired DeleteUser deleteUser) {
-        deleteUser.DeleteUserByEmail("insertTest1@email.com");
+        deleteUser.deleteUserByEmail("insertTest1@email.com");
     }
 }
 

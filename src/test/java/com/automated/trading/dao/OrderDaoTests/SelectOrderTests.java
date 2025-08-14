@@ -79,7 +79,6 @@ public class SelectOrderTests {
     public void selectAllOrdersByUserIdAndTickerAndSideReturnsCorrectOrdersAndIsSorted() {
         List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerAndSide(1, "SELECT", "buy");
         assertTrue(orders.size() == 2);
-        System.out.println(orders);
         assertTrue(orders.get(0).getFilledAt().compareTo(orders.get(1).getFilledAt()) > 0);
     }
 

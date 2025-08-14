@@ -10,7 +10,6 @@ import com.automated.trading.dao.UserDao.DeleteUser;
 import com.automated.trading.dao.UserDao.InsertUser;
 import com.automated.trading.dao.UserDao.SelectUser;
 import com.automated.trading.exception.daoexceptions.userdaoexceptions.DeleteUserDaoNoUserToDelete;
-import com.automated.trading.exception.daoexceptions.userdaoexceptions.SelectUserDaoNoUsersFoundException;
 import com.automated.trading.model.User;
 
 @SpringBootTest
@@ -31,12 +30,11 @@ public class DeleteUserTests {
         String email = "delete_" + UUID.randomUUID() + "@test.com";
         User insertedUser = new User(email, "pw");
         insertUser.insertUser(insertedUser);
-        User newUser = selectUser.selectUserByEmail(email);  // get ID
-        Integer result = deleteUser.DeleteUserById(newUser.getId());
+        User newUser = selectUser.selectUserByEmail(email);  
+        Integer result = deleteUser.deleteUserById(newUser.getId());
 
         assertEquals(1, result);
-        assertThrows(SelectUserDaoNoUsersFoundException.class, 
-                    () -> selectUser.selectUserById(newUser.getId()));
+        assertEquals(null,selectUser.selectUserByEmail(email));
     }
 
     @Test
@@ -45,17 +43,16 @@ public class DeleteUserTests {
         User user = new User(email, "pw");
         insertUser.insertUser(user);
         user = selectUser.selectUserByEmail(email);
-        Integer result = deleteUser.DeleteUserById(user.getId());
+        Integer result = deleteUser.deleteUserById(user.getId());
 
         assertEquals(1, result);
-        assertThrows(SelectUserDaoNoUsersFoundException.class, 
-                    () -> selectUser.selectUserByEmail(email));
+        assertEquals(null, selectUser.selectUserByEmail(email));
     }
 
     @Test
     public void deleteUserThrowsNoUserToDeleteException() {
         String nullEmail = "ThisEmailDoesNotExist@nullemail.com";
         assertThrows(DeleteUserDaoNoUserToDelete.class, 
-                    () -> deleteUser.DeleteUserByEmail(nullEmail));
+                    () -> deleteUser.deleteUserByEmail(nullEmail));
     }
 }

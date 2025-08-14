@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.automated.trading.exception.daoexceptions.userdaoexceptions.SelectUserDaoNoUsersFoundException;
 import com.automated.trading.model.User;
 import com.automated.trading.util.DatabaseConnector;
 
@@ -38,9 +36,6 @@ public class SelectUser {
                 users.add(user);
                 
             }
-            if (users.size() == 0) {
-                throw new SelectUserDaoNoUsersFoundException("No Users are present in the database");
-            }
             return users;
             
         } catch (SQLException e) {
@@ -66,9 +61,6 @@ public class SelectUser {
 
                 user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
                 
-            }
-            if (user == null) {
-                throw new SelectUserDaoNoUsersFoundException("No User Found With ID: " + id);
             }
             return user;
 
@@ -97,9 +89,6 @@ public class SelectUser {
                 user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
                 
             }
-            if (user == null) {
-                throw new SelectUserDaoNoUsersFoundException("No User Found With Email: " + email);
-            }
             return user;
 
             
@@ -117,9 +106,6 @@ public class SelectUser {
 
             ResultSet rs = pstmt.executeQuery();
             String fetchedEmail = rs.getString(1);
-            if (fetchedEmail == null) {
-                throw new SelectUserDaoNoUsersFoundException("No User Found With Email: " + email);
-            }
             return fetchedEmail;
 
             

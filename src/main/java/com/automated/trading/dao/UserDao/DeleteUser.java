@@ -15,7 +15,7 @@ public class DeleteUser {
     @Autowired
     private DatabaseConnector databaseConnector;
 
-    public Integer DeleteUserById(int id) {
+    public Integer deleteUserById(int id) {
         String sql = "DELETE FROM User WHERE id = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -33,7 +33,7 @@ public class DeleteUser {
         }
     }
 
-    public Integer DeleteUserByEmail(String email) {
+    public Integer deleteUserByEmail(String email) {
         String sql = "DELETE FROM User WHERE email = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
