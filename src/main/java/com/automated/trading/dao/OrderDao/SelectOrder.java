@@ -22,7 +22,7 @@ public class SelectOrder {
     
     public List<Order> selectAllOrdersByUserId(Integer userId) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM Order_ WHERE userId = ?";
+        String sql = "SELECT * FROM Order_ WHERE userId = ? ORDER BY filledAt DESC";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
@@ -149,6 +149,34 @@ public class SelectOrder {
             }
             return orders;
             
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public Order selectLatestOrderByUserId(Integer userId) {
+        Order order = null;
+        String sql = "SELECT * FROM Order_ WHERE userId = ? ORDER BY filledAt DESC LIMIT 1";
+        try (Connection conn = databaseConnector.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+
+            ResultSet rs = pstmt.executeQuery();
+            int id = rs.getInt(1);
+            String ticker = rs.getString(3);
+            Timestamp createdAt = rs.getTimestamp(4);
+            Timestamp filledAt = rs.getTimestamp(5);
+            String filledQty = rs.getString(6);
+            String filledAvgPrice = rs.getString(7);
+            String orderType = rs.getString(8);
+            String side = rs.getString(9);
+            String commission = rs.getString(10);
+            
+
+            order = new Order(id,userId,ticker,createdAt,filledAt,filledQty,filledAvgPrice,orderType,side,commission);
+            return order;
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;

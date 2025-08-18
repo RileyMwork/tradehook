@@ -42,6 +42,6 @@ public class InsertOrderTests {
 
     @AfterAll
     public static void cleanup(@Autowired DeleteOrder deleteOrder) {
-        deleteOrder.DeleteOrderByUserId(1);
+        deleteOrder.deleteOrderByUserId(1);
     }
 }

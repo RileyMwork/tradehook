@@ -15,7 +15,7 @@ public class DeleteOrder {
     @Autowired
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public Integer DeleteOrderById(int id) {
+    public Integer deleteOrderById(int id) {
         String sql = "Delete FROM Order_ WHERE id = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -34,7 +34,7 @@ public class DeleteOrder {
         }
     }
 
-    public Integer DeleteOrderByUserId(int userId) {
+    public Integer deleteOrderByUserId(int userId) {
         String sql = "Delete FROM Order_ WHERE userId = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -53,7 +53,7 @@ public class DeleteOrder {
         }
     }
 
-    public Integer DeleteOrderByUserIdAndTicker(int userId, String ticker) {
+    public Integer deleteOrderByUserIdAndTicker(int userId, String ticker) {
         String sql = "Delete FROM Order_ WHERE userId = ? AND ticker = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {

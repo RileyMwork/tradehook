@@ -82,6 +82,13 @@ public class SelectOrderTests {
         assertTrue(orders.get(0).getFilledAt().compareTo(orders.get(1).getFilledAt()) > 0);
     }
 
+    @Test
+    public void selectLatestOrderByUserIdReturnsCorrectOrder() {
+        List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(insertedOrder4.getUserId(), insertedOrder4.getTicker());
+        Order order = selectOrder.selectLatestOrderByUserId(insertedOrder4.getUserId());
+        assertEquals(orders.get(0), order);
+    }
+
     @Test 
     public void selectOrderThrowsExceptionWhenNoOrderIsFoundById() {
         assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectOrderById(10000000));
@@ -104,6 +111,6 @@ public class SelectOrderTests {
 
     @AfterAll
     public static void cleanup(@Autowired DeleteOrder deleteOrder) {
-        deleteOrder.DeleteOrderByUserId(1);
+        deleteOrder.deleteOrderByUserId(1);
     }
 }

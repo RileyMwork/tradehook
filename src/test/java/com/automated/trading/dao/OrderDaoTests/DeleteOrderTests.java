@@ -48,11 +48,11 @@ public class DeleteOrderTests {
     @AfterEach
     void cleanup() {
         try {
-            deleteOrder.DeleteOrderByUserId(1);
+            deleteOrder.deleteOrderByUserId(1);
         } catch (DeleteOrderDaoNoOrderToDeleteException ignored) {}
     
         try {
-            deleteOrder.DeleteOrderByUserId(2);
+            deleteOrder.deleteOrderByUserId(2);
         } catch (DeleteOrderDaoNoOrderToDeleteException ignored) {}
     }
 
@@ -62,7 +62,7 @@ public class DeleteOrderTests {
         List<Order> orders = selectOrder.selectAllOrdersByUserId(1);
         assertFalse(orders.isEmpty());
 
-        int deletedCount = deleteOrder.DeleteOrderById(orders.get(0).getId());
+        int deletedCount = deleteOrder.deleteOrderById(orders.get(0).getId());
         assertEquals(1, deletedCount);
 
         List<Order> remainingOrders = selectOrder.selectAllOrdersByUserId(1);
@@ -71,30 +71,30 @@ public class DeleteOrderTests {
 
     @Test
     public void deleteOrderByUserIdDeletesAllOrdersForUser() {
-        int deletedCount = deleteOrder.DeleteOrderByUserId(1);
+        int deletedCount = deleteOrder.deleteOrderByUserId(1);
         assertEquals(2, deletedCount);
         assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1));
     }
 
     @Test
     public void deleteOrderByUserIdAndTickerDeletesOnlyMatchingOrders() {
-        int deletedCount = deleteOrder.DeleteOrderByUserIdAndTicker(1, "DELTEST");
+        int deletedCount = deleteOrder.deleteOrderByUserIdAndTicker(1, "DELTEST");
         assertEquals(2, deletedCount);
         assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1));
     }
 
     @Test 
     public void deleteOrderThrowsExceptionWhenNoOrderIsFoundById() {
-        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderById(1000000));
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.deleteOrderById(1000000));
     }
 
     @Test 
     public void deleteOrderThrowsExceptionWhenNoOrderIsFoundByUserId() {
-        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderByUserId(1000000));
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.deleteOrderByUserId(1000000));
     }
 
     @Test 
     public void deleteOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTicker() {
-        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.DeleteOrderByUserIdAndTicker(1000000,"NULLTICKER"));
+        assertThrows(DeleteOrderDaoNoOrderToDeleteException.class, () -> deleteOrder.deleteOrderByUserIdAndTicker(1000000,"NULLTICKER"));
     }
 }
