@@ -1,14 +1,12 @@
 package com.automated.trading.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.jupiter.api.AfterAll;
+import com.automated.trading.dao.OrderDao.DeleteOrder;
+import com.automated.trading.exception.daoexceptions.orderdaoexceptions.DeleteOrderDaoNoOrderToDeleteException;
+import com.automated.trading.model.Order;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,17 +14,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.automated.trading.dao.OrderDao.DeleteOrder;
-import com.automated.trading.dao.UserDao.DeleteUser;
-import com.automated.trading.exception.daoexceptions.orderdaoexceptions.DeleteOrderDaoNoOrderToDeleteException;
-import com.automated.trading.model.Order;
-
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderServiceTests {
-    
+
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private DeleteOrder deleteOrder;
 
     private Order order1;
     private Order order2;
@@ -40,29 +36,26 @@ public class OrderServiceTests {
     private String selectTicker = "SELECT";
     private String deleteTicker = "DELETE";
 
-    private Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-    private Timestamp later = Timestamp.valueOf(LocalDateTime.now().plusSeconds(10));
-    private Timestamp evenLater = Timestamp.valueOf(LocalDateTime.now().plusSeconds(20));
+    private Timestamp now;
+    private Timestamp later;
+    private Timestamp evenLater;
 
-    private String filledQty = "1";
-
-    private String filledAvgPrice = "2.50";
-
-    private String orderType = "market";
-
-    private String side = "buy";
-
-    private String commission = null;
+    private String sideBuy = "buy";
+    private String sideSell = "sell";
 
     @BeforeAll
     void setup() {
-        order1 = new Order(1, insertTicker, now, now, filledQty, filledAvgPrice, orderType, side, commission);
-        order2 = new Order(1, selectTicker, now, now, filledQty, filledAvgPrice, orderType, side, commission);
-        order3 = new Order(1, selectTicker, later, later, filledQty, filledAvgPrice, orderType, side, commission);
-        order4 = new Order(1, selectTicker, evenLater, evenLater, filledQty, filledAvgPrice, orderType, side, commission);
-        order5 = new Order(1, selectTicker, evenLater, evenLater, filledQty, filledAvgPrice, orderType, "sell", commission);
-        order6 = new Order(1, deleteTicker, now, now, filledQty, filledAvgPrice, orderType, side, commission);
-        otherUserOrder = new Order(2, deleteTicker, now, now, filledQty, filledAvgPrice, orderType, side, commission);
+        now = Timestamp.valueOf(LocalDateTime.now());
+        later = Timestamp.valueOf(LocalDateTime.now().plusSeconds(10));
+        evenLater = Timestamp.valueOf(LocalDateTime.now().plusSeconds(20));
+
+        order1 = new Order(1, "ORD-1", insertTicker, now, sideBuy);
+        order2 = new Order(1, "ORD-2", selectTicker, now, sideBuy);
+        order3 = new Order(1, "ORD-3", selectTicker, later, sideBuy);
+        order4 = new Order(1, "ORD-4", selectTicker, evenLater, sideBuy);
+        order5 = new Order(1, "ORD-5", selectTicker, evenLater, sideSell);
+        order6 = new Order(1, "ORD-6", deleteTicker, now, sideBuy);
+        otherUserOrder = new Order(2, "ORD-7", deleteTicker, now, sideBuy);
     }
 
     @Test
@@ -77,8 +70,7 @@ public class OrderServiceTests {
         orderService.createNewOrder(order3);
         orderService.createNewOrder(order4);
         List<Order> orders = orderService.selectAllOrdersByUserId(1);
-        assertTrue(orders.size() == 3);
-
+        assertEquals(3, orders.size());
     }
 
     @Test
@@ -87,8 +79,8 @@ public class OrderServiceTests {
         orderService.createNewOrder(order2);
         orderService.createNewOrder(order3);
         orderService.createNewOrder(order4);
-        List<Order> orders = orderService.selectAllOrdersByUserIdAndTickerSorted(1,selectTicker);
-        assertTrue(orders.size() == 3);
+        List<Order> orders = orderService.selectAllOrdersByUserIdAndTickerSorted(1, selectTicker);
+        assertEquals(3, orders.size());
     }
 
     @Test
@@ -98,43 +90,48 @@ public class OrderServiceTests {
         orderService.createNewOrder(order3);
         orderService.createNewOrder(order4);
         orderService.createNewOrder(order5);
-        List<Order> orders = orderService.selectAllOrdersByUserIdAndTickerAndSideSorted(1,selectTicker,side);
-        assertTrue(orders.size() == 3);
+        List<Order> orders = orderService.selectAllOrdersByUserIdAndTickerAndSideSorted(1, selectTicker, sideBuy);
+        assertEquals(3, orders.size());
     }
 
     @Test
     public void deleteOrderByIdDeletesCorrectOrder() {
         orderService.createNewOrder(order1);
         orderService.createNewOrder(order6);
-        List<Order> orderToDelete = orderService.selectAllOrdersByUserId(1);
-        assertEquals(1,orderService.deleteOrderById(orderToDelete.get(0).getId()));
+        List<Order> orders = orderService.selectAllOrdersByUserId(1);
+        assertEquals(1, orderService.deleteOrderById(orders.get(0).getId()));
     }
 
     @Test
-    public void deleteOrderByIdUserIdDeletesCorrectOrders() {
+    public void deleteOrderByUserIdDeletesCorrectOrders() {
         orderService.createNewOrder(otherUserOrder);
         orderService.createNewOrder(order1);
         orderService.createNewOrder(order6);
         List<Order> ordersToDelete = orderService.selectAllOrdersByUserId(1);
-        assertEquals(2,orderService.deleteOrdersByUserId(ordersToDelete.get(0).getUserId()));
+        assertEquals(2, orderService.deleteOrdersByUserId(ordersToDelete.get(0).getUserId()));
     }
 
     @Test
-    public void deleteOrderByIdUserIdAndTickerDeletesCorrectOrders() {
+    public void deleteOrderByUserIdAndTickerDeletesCorrectOrders() {
         orderService.createNewOrder(otherUserOrder);
         orderService.createNewOrder(order1);
         orderService.createNewOrder(order6);
         List<Order> ordersToDelete = orderService.selectAllOrdersByUserId(1);
-        assertEquals(1,orderService.deleteOrdersByUserIdAndTicker(ordersToDelete.get(0).getUserId(), ordersToDelete.get(0).getTicker()));
+        assertEquals(1, orderService.deleteOrdersByUserIdAndTicker(ordersToDelete.get(0).getUserId(), ordersToDelete.get(0).getTicker()));
     }
 
     @AfterEach
-    public void cleanup(@Autowired DeleteOrder deleteOrder) {
+    public void cleanup() {
         try {
             deleteOrder.deleteOrderByUserId(1);
         } catch (DeleteOrderDaoNoOrderToDeleteException e) {
             System.out.println(e.getMessage());
         }
-        // deleteOrder.deleteOrderByUserId(2);
+
+        try {
+            deleteOrder.deleteOrderByUserId(2);
+        } catch (DeleteOrderDaoNoOrderToDeleteException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

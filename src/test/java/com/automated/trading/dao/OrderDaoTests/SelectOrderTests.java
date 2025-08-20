@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,15 @@ public class SelectOrderTests {
 
     @BeforeAll
     void setup() {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         Timestamp later = Timestamp.valueOf(LocalDateTime.now().plusSeconds(10));
         Timestamp moreLater = Timestamp.valueOf(LocalDateTime.now().plusSeconds(20));
-        insertedOrder1 = new Order(1,"SELECT",Timestamp.valueOf(LocalDateTime.now()),Timestamp.valueOf(LocalDateTime.now()),"1","2.50","market","buy",null);
-        insertedOrder2 = new Order(1,"SELECT",Timestamp.valueOf(LocalDateTime.now()),later,"1","5.50","market","sell",null);
-        insertedOrder3 = new Order(1,"NULL",Timestamp.valueOf(LocalDateTime.now()),Timestamp.valueOf(LocalDateTime.now()),"1","5.50","market","buy",null);
-        insertedOrder4 = new Order(1,"SELECT",Timestamp.valueOf(LocalDateTime.now()),moreLater,"1","5.50","market","buy",null);
+
+        insertedOrder1 = new Order(1, "TESTORDERID1", "SELECT", now, "buy");
+        insertedOrder2 = new Order(1, "TESTORDERID2", "SELECT", later, "sell");
+        insertedOrder3 = new Order(1, "TESTORDERID3", "NULL", now, "buy");
+        insertedOrder4 = new Order(1, "TESTORDERID4", "SELECT", moreLater, "buy");
+
         insertOrder.insertOrder(insertedOrder1);
         insertOrder.insertOrder(insertedOrder2);
         insertOrder.insertOrder(insertedOrder3);
@@ -56,57 +60,58 @@ public class SelectOrderTests {
         for (Order order : orders) {
             orderUserIds.add(order.getUserId());
         }
-        assertTrue(orders.size() == 4);
-        assertTrue(orderUserIds.size() == 1);
+        assertEquals(4, orders.size());
+        assertEquals(1, orderUserIds.size());
     }
 
     @Test
     public void selectByIdReturnsCorrectOrder() {
         List<Order> orders = selectOrder.selectAllOrdersByUserId(1);
         Order expectedOrder = orders.get(0);
-        Order actualOrder = selectOrder.selectOrderById(orders.get(0).getId());
+        Order actualOrder = selectOrder.selectOrderById(expectedOrder.getId());
         assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
-    public void selectAllOrdersByUserIdAndTickerSortedByFilledAtReturnsCorrectOrdersAndIsSorted() {
-        List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(1, "SELECT");
-        assertTrue(orders.size() == 3);
-        assertTrue(orders.get(0).getFilledAt().compareTo(orders.get(1).getFilledAt()) > 0);
+    public void selectAllOrdersByUserIdAndTickerSortedByCreatedAtReturnsCorrectOrdersAndIsSorted() {
+        List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByCreatedAt(1, "SELECT");
+        assertEquals(3, orders.size());
+        assertTrue(orders.get(0).getCreatedAt().compareTo(orders.get(1).getCreatedAt()) >= 0);
+        assertTrue(orders.get(1).getCreatedAt().compareTo(orders.get(2).getCreatedAt()) >= 0);
     }
 
     @Test
     public void selectAllOrdersByUserIdAndTickerAndSideReturnsCorrectOrdersAndIsSorted() {
         List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerAndSide(1, "SELECT", "buy");
-        assertTrue(orders.size() == 2);
-        assertTrue(orders.get(0).getFilledAt().compareTo(orders.get(1).getFilledAt()) > 0);
+        assertEquals(2, orders.size());
+        assertTrue(orders.get(0).getCreatedAt().compareTo(orders.get(1).getCreatedAt()) >= 0);
     }
 
     @Test
     public void selectLatestOrderByUserIdReturnsCorrectOrder() {
-        List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(insertedOrder4.getUserId(), insertedOrder4.getTicker());
-        Order order = selectOrder.selectLatestOrderByUserId(insertedOrder4.getUserId());
-        assertEquals(orders.get(0), order);
+        List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByCreatedAt(insertedOrder4.getUserId(), insertedOrder4.getTicker());
+        Order latest = selectOrder.selectLatestOrderByUserId(insertedOrder4.getUserId());
+        assertEquals(orders.get(0), latest);
     }
 
     @Test 
     public void selectOrderThrowsExceptionWhenNoOrderIsFoundById() {
-        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectOrderById(10000000));
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectOrderById(9999999));
     }
 
     @Test 
     public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserId() {
-        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(1000000));
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserId(9999999));
     }
 
     @Test 
     public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTicker() {
-        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(10000000, "NULLTICKER"));
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerSortedByCreatedAt(9999999, "NULLTICKER"));
     }
 
     @Test 
     public void selectOrderThrowsExceptionWhenNoOrderIsFoundByUserIdAndTickerAndSide() {
-        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerAndSide(10000000, "NULLTICKER", "buy"));
+        assertThrows(SelectOrderDaoNoOrderFoundException.class, () -> selectOrder.selectAllOrdersByUserIdAndTickerAndSide(9999999, "NULLTICKER", "buy"));
     }
 
     @AfterAll

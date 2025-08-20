@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.automated.trading.dao.OrderDao.DeleteOrder;
 import com.automated.trading.dao.OrderDao.InsertOrder;
 import com.automated.trading.dao.OrderDao.SelectOrder;
@@ -31,8 +32,7 @@ public class OrderService {
 
     public List<Order> selectAllOrdersByUserId(Integer userId) {
         try {
-            List<Order> orders = selectOrder.selectAllOrdersByUserId(userId);
-            return orders;
+            return selectOrder.selectAllOrdersByUserId(userId);
         } catch (SelectOrderDaoNoOrderFoundException e) {
             System.out.println(e.getMessage());
             return null;
@@ -41,8 +41,7 @@ public class OrderService {
     
     public List<Order> selectAllOrdersByUserIdAndTickerSorted(Integer userId, String ticker) {
         try {
-            List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerSortedByFilledAt(userId, ticker);
-            return orders;
+            return selectOrder.selectAllOrdersByUserIdAndTickerSortedByCreatedAt(userId, ticker); // Renamed method
         } catch (SelectOrderDaoNoOrderFoundException e) {
             System.out.println(e.getMessage());
             return null;
@@ -51,8 +50,7 @@ public class OrderService {
 
     public List<Order> selectAllOrdersByUserIdAndTickerAndSideSorted(Integer userId, String ticker, String side) {
         try {
-            List<Order> orders = selectOrder.selectAllOrdersByUserIdAndTickerAndSide(userId, ticker, side);
-            return orders;
+            return selectOrder.selectAllOrdersByUserIdAndTickerAndSide(userId, ticker, side);
         } catch (SelectOrderDaoNoOrderFoundException e) {
             System.out.println(e.getMessage());
             return null;
@@ -61,8 +59,7 @@ public class OrderService {
 
     public Integer deleteOrderById(Integer id) {
         try {
-            Integer deletedOrderRow = deleteOrder.deleteOrderById(id);
-            return deletedOrderRow;
+            return deleteOrder.deleteOrderById(id);
         } catch (DeleteOrderDaoNoOrderToDeleteException e) {
             System.out.println(e.getMessage());
             return null;
@@ -71,23 +68,19 @@ public class OrderService {
 
     public Integer deleteOrdersByUserId(Integer userId) {
         try {
-            Integer deletedOrderRow = deleteOrder.deleteOrderByUserId(userId);
-            return deletedOrderRow;
+            return deleteOrder.deleteOrderByUserId(userId);
         } catch (DeleteOrderDaoNoOrderToDeleteException e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
 
-    public Integer deleteOrdersByUserIdAndTicker(Integer userId, String ticekr) {
+    public Integer deleteOrdersByUserIdAndTicker(Integer userId, String ticker) {
         try {
-            Integer deletedOrderRow = deleteOrder.deleteOrderByUserIdAndTicker(userId,ticekr);
-            return deletedOrderRow;
+            return deleteOrder.deleteOrderByUserIdAndTicker(userId, ticker); // fixed typo from "ticekr"
         } catch (DeleteOrderDaoNoOrderToDeleteException e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
-
-
 }

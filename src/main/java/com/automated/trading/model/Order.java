@@ -12,50 +12,32 @@ public class Order {
 
     private Integer userId;
 
+    private String orderId;
+
     private String ticker;
 
     private Timestamp createdAt;
 
-    private Timestamp filledAt;
-
-    private String filledQty;
-
-    private String filledAvgPrice;
-
-    private String orderType;
-
     private String side;
-
-    private String commission;
 
     public Order() {
     }
 
-    public Order(Integer userId, String ticker, Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
-                String orderType, String side, String commission) {
+    public Order(Integer userId, String orderId, String ticker, Timestamp createdAt, String side) {
         this.userId = userId;
+        this.orderId = orderId;
         this.ticker = ticker;
         this.createdAt = createdAt;
-        this.filledAt = filledAt;
-        this.filledQty = filledQty;
-        this.filledAvgPrice = filledAvgPrice;
-        this.orderType = orderType;
         this.side = side;
-        this.commission = commission;
     }
 
-    public Order(Integer id, Integer userId, String ticker, Timestamp createdAt, Timestamp filledAt, String filledQty, String filledAvgPrice,
-                String orderType, String side, String commission) {
+    public Order(Integer id, Integer userId, String orderId, String ticker, Timestamp createdAt, String side) {
         this.id = id;
+        this.orderId = orderId;
         this.userId = userId;
         this.ticker = ticker;
         this.createdAt = createdAt;
-        this.filledAt = filledAt;
-        this.filledQty = filledQty;
-        this.filledAvgPrice = filledAvgPrice;
-        this.orderType = orderType;
         this.side = side;
-        this.commission = commission;
     }
 
     public Integer getId() {
@@ -74,6 +56,14 @@ public class Order {
         this.userId = userId;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public String getTicker() {
         return ticker;
     }
@@ -90,52 +80,12 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getFilledAt() {
-        return filledAt;
-    }
-
-    public void setFilledAt(Timestamp filledAt) {
-        this.filledAt = filledAt;
-    }
-
-    public String getFilledQty() {
-        return filledQty;
-    }
-
-    public void setFilledQty(String filledQty) {
-        this.filledQty = filledQty;
-    }
-
-    public String getFilledAvgPrice() {
-        return filledAvgPrice;
-    }
-
-    public void setFilledAvgPrice(String filledAvgPrice) {
-        this.filledAvgPrice = filledAvgPrice;
-    }
-
-    public String getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-
     public String getSide() {
         return side;
     }
 
     public void setSide(String side) {
         this.side = side;
-    }
-
-    public String getCommission() {
-        return commission;
-    }
-
-    public void setCommission(String commission) {
-        this.commission = commission;
     }
 
     @Override
@@ -145,17 +95,14 @@ public class Order {
 
         Order other = (Order) obj;
 
-        if (userId != other.userId) return false;
-        if (ticker != null ? !ticker.equals(other.ticker) : other.ticker != null) return false;
+        if (userId != null ? !userId.equals(other.userId) : other.userId != null) return false;
         if (id != null ? !id.equals(other.id) : other.id != null) return false;
+        if (orderId != null ? !orderId.equals(other.orderId) : other.orderId != null) return false;
+        if (ticker != null ? !ticker.equals(other.ticker) : other.ticker != null) return false;
         if (createdAt != null ? !createdAt.equals(other.createdAt) : other.createdAt != null) return false;
-        if (filledAt != null ? !filledAt.equals(other.filledAt) : other.filledAt != null) return false;
-        if (filledQty != null ? !filledQty.equals(other.filledQty) : other.filledQty != null) return false;
-        if (filledAvgPrice != null ? !filledAvgPrice.equals(other.filledAvgPrice) : other.filledAvgPrice != null)
-            return false;
-        if (orderType != null ? !orderType.equals(other.orderType) : other.orderType != null) return false;
         if (side != null ? !side.equals(other.side) : other.side != null) return false;
-        return commission != null ? commission.equals(other.commission) : other.commission == null;
+
+        return true;
     }
 
     @Override
@@ -163,14 +110,10 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", orderId='" + orderId + '\'' +
                 ", ticker='" + ticker + '\'' +
                 ", createdAt=" + createdAt +
-                ", filledAt=" + filledAt +
-                ", filledQty='" + filledQty + '\'' +
-                ", filledAvgPrice='" + filledAvgPrice + '\'' +
-                ", orderType='" + orderType + '\'' +
                 ", side='" + side + '\'' +
-                ", commission='" + commission + '\'' +
                 '}';
     }
 }
