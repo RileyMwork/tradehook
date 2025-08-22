@@ -115,4 +115,28 @@ public class SelectUser {
         }
     }
 
+    public User selectUserByTradehookApiKey(String tradehookApiKey) {
+        User user = null;
+        String sql = "SELECT * FROM User WHERE tradehookApiKey = ?";
+        try (Connection conn = databaseConnector.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, tradehookApiKey);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt(1);
+                String email = rs.getString(2);
+                String password = rs.getString(3);
+                String alapcaApiKey = rs.getString(5);
+                String alapcaSecretKey = rs.getString(6);
+
+                user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
+                
+            }
+            return user;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

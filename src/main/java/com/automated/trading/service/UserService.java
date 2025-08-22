@@ -68,6 +68,15 @@ public class UserService {
         }
     }
 
+    public User selectUserByTradehookApiKey(User user) {
+        User selectedUser = selectUser.selectUserByTradehookApiKey(user.getTradehookApiKey());
+        if (selectedUser == null) {
+            throw new UserServiceSelectedUserNotFoundException("Could not find User with key: " + user.getTradehookApiKey());
+        } else {
+            return selectedUser;
+        }
+    }
+
     public User selectUserEmailByEmail(User user) {
         String email = selectUser.selectUserEmailByEmail(user.getEmail());
         if (email == null) {

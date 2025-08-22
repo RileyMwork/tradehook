@@ -40,7 +40,7 @@ public class UserServiceTests {
 
     @BeforeAll
     void setup() {
-        validUser = new User(validEmail,validPassword,null,null,null);
+        validUser = new User(validEmail,validPassword,"TESTKEY",null,null);
         emailTakenUser = new User(emailIsTaken,validPassword,null,null,null);
         emailTooLongUser = new User(emailIsTooLong,validPassword,null,null,null);
         passwordTooLongUser = new User(100000000,otherValidEmail,invalidPassword,null,null,null);
@@ -87,6 +87,13 @@ public class UserServiceTests {
         User createdUser = userService.selectUserById(createdUserWEmail);
         assertEquals(validUser.getEmail(), createdUser.getEmail());
         assertEquals(validUser.getPassword(), createdUser.getPassword());
+    }
+
+    @Test
+    public void selectValidUserByTradehookApiKeyReturnsValidUser() {
+        User createdUserWithKey = userService.selectUserByTradehookApiKey(validUser);
+        User createdUser = userService.selectUserByTradehookApiKey(createdUserWithKey);
+        assertEquals(validUser.getTradehookApiKey(), createdUser.getTradehookApiKey());
     }
 
     @Test

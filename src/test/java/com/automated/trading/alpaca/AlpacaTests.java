@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.model.util.apitype.MarketDataWebsocketSourceType;
+import net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType;
 import net.jacobpeterson.alpaca.openapi.trader.ApiException;
 import net.jacobpeterson.alpaca.openapi.trader.model.Order;
 
@@ -14,27 +18,17 @@ import net.jacobpeterson.alpaca.openapi.trader.model.Order;
 public class AlpacaTests {
 
     @Autowired
-    private AuthInfo authInfo;
-
-    @Autowired
     private PlaceOrder placeOrder;
 
     @Test 
-    public void getAccountDoesNotReturnNull () {
-        assertFalse(authInfo.getAccount() == null);
-    }
-
-    @Test 
     public void placeSimpleOrderCreatesAlpacaOrder() {
-        try {
-            Order buyOrder = placeOrder.placeSimpleOrder("LTCUSD", "1", "buy");
-            String qtyToSell = authInfo.alpacaAPI.trader().positions().getOpenPosition("LTCUSD").getQty();
-            assertFalse(buyOrder == null);
-            Order sellOrder = placeOrder.placeSimpleOrder("LTCUSD", qtyToSell, "sell");
-            assertFalse(sellOrder == null);
-        } catch (ApiException e) {
-            System.out.println(e.getMessage());
-        }
+        String keyId = "PKMDBNJDRPH703STQP49";
+        String secretKey = "PRkNe668qslhlM9LDNsd83WtLrhLhPpTJ2wO89w8";
+        Order buyOrder = placeOrder.placeSimpleOrder("LTCUSD", "1", "buy",keyId,secretKey);
+        String qtyToSell = placeOrder.getSellAmount(keyId, secretKey, "LTCUSD");
+        assertFalse(buyOrder == null);
+        Order sellOrder = placeOrder.placeSimpleOrder("LTCUSD", qtyToSell, "sell",keyId,secretKey);
+        assertFalse(sellOrder == null);
     }
 
 }
