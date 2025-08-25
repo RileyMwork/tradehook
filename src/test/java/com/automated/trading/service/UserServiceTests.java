@@ -114,17 +114,19 @@ public class UserServiceTests {
     }
 
     @Test
-    public void updateNonExistentUserCatchesExceptionReturnsNull() {
-        assertEquals(null,userService.updateUser(passwordTooLongUser));
+    public void updateValidUserAlpacaKeysReturnsUpdatedUser() {
+        User userToUpdate = userService.selectUserByEmail(validUser);
+        User updatedUserInfo = new User(userToUpdate.getId(),userToUpdate.getEmail(),userToUpdate.getPassword(),userToUpdate.getTradehookApiKey(),"UPDATEDKEY","UPDATEDSCERETKEY");
+        User postUpdateUser = userService.updateAlpacaApiKeys(updatedUserInfo);
+        assertEquals(updatedUserInfo, postUpdateUser);    
     }
 
     @Test
-    public void updateValidUserReturnsUpdatedUser() {
+    public void updateValidUserTradehookKeyReturnsUpdatedUser() {
         User userToUpdate = userService.selectUserByEmail(validUser);
-        User updatedUserInfo = new User(userToUpdate.getId(),"updatedvalidemail@testemail.com","updatedvalidpassword", "update", null, null);
-        User postUpdateUser = userService.updateUser(updatedUserInfo);
-        assertEquals(updatedUserInfo, postUpdateUser);
-        
+        User updatedUserInfo = new User(userToUpdate.getId(),userToUpdate.getEmail(),userToUpdate.getPassword(),"UPDATEDTRADEHOOKKEY",userToUpdate.getAlpacaApiKey(),userToUpdate.getAlpacaSecretKey());
+        User postUpdateUser = userService.updateTradehookApiKey(updatedUserInfo);
+        assertEquals(updatedUserInfo, postUpdateUser);    
     }
 
     @Test
@@ -157,7 +159,7 @@ public class UserServiceTests {
 
     @AfterAll
     public static void cleanup(@Autowired DeleteUser deleteUser) {
-        deleteUser.deleteUserByEmail("updatedvalidemail@testemail.com");
+        deleteUser.deleteUserByEmail("testingwithvalidemail@testemail.com");
     }
 }
 

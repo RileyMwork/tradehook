@@ -10,6 +10,7 @@ import com.automated.trading.exception.daoexceptions.userdaoexceptions.DeleteUse
 import com.automated.trading.exception.daoexceptions.userdaoexceptions.UpdateUserDaoNoUserFound;
 import com.automated.trading.exception.serviceexceptions.UserServiceNewUserInfoTooLongException;
 import com.automated.trading.exception.serviceexceptions.UserServiceNoUserEmailFoundException;
+import com.automated.trading.exception.serviceexceptions.UserServicePasswordIncorrectException;
 import com.automated.trading.exception.serviceexceptions.UserServiceSelectedUserNotFoundException;
 import com.automated.trading.exception.serviceexceptions.UserServiceUserAlreadyExistsException;
 import com.automated.trading.model.User;
@@ -90,11 +91,68 @@ public class UserService {
         }
     }
 
-    public User updateUser(User user) {
+    // public User updateUser(User user) {
+    //     String email = user.getEmail();
+    //     try {
+    //         User existingUser = selectUser.selectUserByEmail(email);
+
+    //         if (existingUser == null) {
+    //             throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
+    //         }
+
+    //         existingUser.setAlpacaApiKey(user.getAlpacaApiKey());
+    //         existingUser.setAlpacaSecretKey(user.getAlpacaSecretKey());
+
+    //         updateUser.updateUser(existingUser); 
+
+    //         return existingUser; 
+    //     } catch (UpdateUserDaoNoUserFound e) {
+    //         System.out.println(e.getMessage());
+    //         return null;
+    //     }
+    // }
+
+    public User updateAlpacaApiKeys(User user) {
         try {
-            updateUser.updateUser(user);
-            User updatedUser = selectUser.selectUserByEmail(user.getEmail());
-            return updatedUser;
+            String email = user.getEmail();
+            User existingUser = selectUser.selectUserByEmail(email);
+
+            if (existingUser == null) {
+                throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
+            }
+
+            // Update the existing user's alpacaApiKey and alpacaSecretKey
+            existingUser.setAlpacaApiKey(user.getAlpacaApiKey());
+            existingUser.setAlpacaSecretKey(user.getAlpacaSecretKey());
+
+            // Persist the updated user (if your `updateUser` method saves changes)
+            updateUser.updateUserAlpacaKeys(existingUser);
+
+            // Return the updated user
+            return existingUser;
+        } catch (UpdateUserDaoNoUserFound e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public User updateTradehookApiKey(User user) {
+        try {
+            String email = user.getEmail();
+            User existingUser = selectUser.selectUserByEmail(email);
+
+            if (existingUser == null) {
+                throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
+            }
+
+            // Update the existing user's alpacaApiKey and alpacaSecretKey
+            existingUser.setTradehookApiKey(user.getTradehookApiKey());
+
+            // Persist the updated user (if your `updateUser` method saves changes)
+            updateUser.updateUserTradehookKey(existingUser);
+
+            // Return the updated user
+            return existingUser;
         } catch (UpdateUserDaoNoUserFound e) {
             System.out.println(e.getMessage());
             return null;
@@ -116,6 +174,19 @@ public class UserService {
         } catch (DeleteUserDaoNoUserToDelete e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public User login(User user) {
+        User loginUser = selectUser.selectUserByEmail(user.getEmail());
+        if (loginUser == null) {
+            throw new UserServiceNoUserEmailFoundException("Incorrect login information");
+        }
+        String correctPassword = loginUser.getPassword();
+        if (!user.getPassword().equals(correctPassword)) {
+            throw new UserServicePasswordIncorrectException("Incorrect login information");
+        } else {
+            return loginUser;
         }
     }
 

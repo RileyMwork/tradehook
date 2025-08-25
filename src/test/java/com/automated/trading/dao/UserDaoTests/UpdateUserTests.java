@@ -26,7 +26,7 @@ public class UpdateUserTests {
     private UpdateUser updateUser;
 
     @Test
-    public void testUpdateUserReturnsOneAndUpdatesFields() {
+    public void testUpdateUserAlpacaKeysReturnsOneAndUpdatesFields() {
         String originalEmail = "updateTest@email.com";
         String originalPassword = "originalPassword";
         User userToInsert = new User(originalEmail, originalPassword);
@@ -35,32 +35,46 @@ public class UpdateUserTests {
 
         User user = selectUser.selectUserByEmail(originalEmail);
         assertNotNull(user);
-
-        user.setEmail("updatedEmail@email.com");
-        user.setPassword("updatedPassword");
-        user.setTradehookApiKey("updatedTradehookApiKey");
         user.setAlpacaApiKey("updatedAlpacaApiKey");
         user.setAlpacaSecretKey("updatedAlpacaSecretKey");
 
-        Integer updated = updateUser.updateUser(user);
+        Integer updated = updateUser.updateUserAlpacaKeys(user);
         assertEquals(1, updated);
 
         User updatedUser = selectUser.selectUserById(user.getId());
         assertNotNull(updatedUser);
-        assertEquals("updatedEmail@email.com", updatedUser.getEmail());
-        assertEquals("updatedPassword", updatedUser.getPassword());
-        assertEquals("updatedTradehookApiKey", updatedUser.getTradehookApiKey());
         assertEquals("updatedAlpacaApiKey", updatedUser.getAlpacaApiKey());
         assertEquals("updatedAlpacaSecretKey", updatedUser.getAlpacaSecretKey());
     }
 
     @Test
+    public void testUpdateUserTradehookKeyReturnsOneAndUpdatesFields() {
+        String originalEmail = "otherUpdateTest@email.com";
+        String originalPassword = "originalPassword";
+        User userToInsert = new User(originalEmail, originalPassword);
+        Integer inserted = insertUser.insertUser(userToInsert);
+        assertEquals(1, inserted);
+
+        User user = selectUser.selectUserByEmail(originalEmail);
+        assertNotNull(user);
+        user.setTradehookApiKey("updatedTradehookApiKey");
+
+        Integer updated = updateUser.updateUserTradehookKey(user);
+        assertEquals(1, updated);
+
+        User updatedUser = selectUser.selectUserById(user.getId());
+        assertNotNull(updatedUser);
+        assertEquals("updatedTradehookApiKey", updatedUser.getTradehookApiKey());
+    }
+
+    @Test
     public void updateUserThrowsNullExceptionWhenAttributeIsNull() {
-        assertThrows(NullPointerException.class, () -> updateUser.updateUser(null));
+        assertThrows(NullPointerException.class, () -> updateUser.updateUserAlpacaKeys(null));
     }
 
     @AfterAll
     public static void cleanup(@Autowired DeleteUser deleteUser) {
-        deleteUser.deleteUserByEmail("updatedEmail@email.com");
+        deleteUser.deleteUserByEmail("updateTest@email.com");
+        deleteUser.deleteUserByEmail("otherUpdateTest@email.com");
     }
 }

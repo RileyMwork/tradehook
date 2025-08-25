@@ -42,6 +42,13 @@ public class User {
         this.alpacaSecretKey = alpacaSecretKey;
     }
 
+    public User(String email, String tradehookApiKey, String alpacaApiKey, String alpacaSecretKey){
+        this.email = email;
+        this.tradehookApiKey = tradehookApiKey;
+        this.alpacaApiKey = alpacaApiKey;
+        this.alpacaSecretKey = alpacaSecretKey;
+    }
+
     public User(Integer id, String email, String password, String tradehookApiKey, String alpacaApiKey, String alpacaSecretKey) {
         this.id = id;
         this.email = email;
