@@ -23,9 +23,10 @@ public class UserController {
 
     // POST /api/user/create
     @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user,HttpSession session) {
         try {
             User createdUser = userService.createNewUser(user);
+            session.setAttribute("email", createdUser.getEmail());
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);  // Return user with 201 Created status
         } catch (UserServiceNewUserInfoTooLongException | UserServiceUserAlreadyExistsException e) {
             System.out.println(e.getMessage());
@@ -91,4 +92,16 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        User currentUser = new User(email);
+        userService.deleteUserByEmail(currentUser);
+        return new ResponseEntity<>("User Deleted",HttpStatus.OK);
+    }
 }
+
+
