@@ -19,9 +19,10 @@ public class SelectOrder {
     @Autowired
     private DatabaseConnector databaseConnector;
 
+    // Select all orders by user ID
     public List<Order> selectAllOrdersByUserId(Integer userId) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT id, userId, orderId, ticker, createdAt, side FROM Order_ WHERE userId = ? ORDER BY createdAt DESC";
+        String sql = "SELECT id, userId, orderId, ticker, qty, createdAt, side FROM Order_ WHERE userId = ? ORDER BY createdAt DESC";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -32,10 +33,11 @@ public class SelectOrder {
                 int id = rs.getInt("id");
                 String orderId = rs.getString("orderId");
                 String ticker = rs.getString("ticker");
+                String qty = rs.getString("qty");  // Fetch qty from the database
                 Timestamp createdAt = rs.getTimestamp("createdAt");
                 String side = rs.getString("side");
 
-                Order order = new Order(id, userId, orderId, ticker, createdAt, side);
+                Order order = new Order(id, userId, orderId, ticker, qty, createdAt, side);  // Pass qty to the constructor
                 orders.add(order);
             }
 
@@ -51,9 +53,10 @@ public class SelectOrder {
         }
     }
 
+    // Select order by order ID
     public Order selectOrderById(Integer id) {
         Order order = null;
-        String sql = "SELECT id, userId, orderId, ticker, createdAt, side FROM Order_ WHERE id = ?";
+        String sql = "SELECT id, userId, orderId, ticker, qty, createdAt, side FROM Order_ WHERE id = ?";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -64,10 +67,11 @@ public class SelectOrder {
                 int userId = rs.getInt("userId");
                 String orderId = rs.getString("orderId");
                 String ticker = rs.getString("ticker");
+                String qty = rs.getString("qty");  // Fetch qty from the database
                 Timestamp createdAt = rs.getTimestamp("createdAt");
                 String side = rs.getString("side");
 
-                order = new Order(id, userId, orderId, ticker, createdAt, side);
+                order = new Order(id, userId, orderId, ticker, qty, createdAt, side);  // Pass qty to the constructor
             }
 
             if (order == null) {
@@ -82,9 +86,10 @@ public class SelectOrder {
         }
     }
 
+    // Select all orders by user ID and ticker sorted by creation date
     public List<Order> selectAllOrdersByUserIdAndTickerSortedByCreatedAt(Integer userId, String ticker) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT id, userId, orderId, ticker, createdAt, side FROM Order_ WHERE userId = ? AND ticker = ? ORDER BY createdAt DESC";
+        String sql = "SELECT id, userId, orderId, ticker, qty, createdAt, side FROM Order_ WHERE userId = ? AND ticker = ? ORDER BY createdAt DESC";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -95,10 +100,11 @@ public class SelectOrder {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String orderId = rs.getString("orderId");
+                String qty = rs.getString("qty");  // Fetch qty from the database
                 Timestamp createdAt = rs.getTimestamp("createdAt");
                 String side = rs.getString("side");
 
-                Order order = new Order(id, userId, orderId, ticker, createdAt, side);
+                Order order = new Order(id, userId, orderId, ticker, qty, createdAt, side);  // Pass qty to the constructor
                 orders.add(order);
             }
 
@@ -114,9 +120,10 @@ public class SelectOrder {
         }
     }
 
+    // Select all orders by user ID, ticker, and side
     public List<Order> selectAllOrdersByUserIdAndTickerAndSide(Integer userId, String ticker, String side) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT id, userId, orderId, ticker, createdAt, side FROM Order_ WHERE userId = ? AND ticker = ? AND side = ? ORDER BY createdAt DESC";
+        String sql = "SELECT id, userId, orderId, ticker, qty, createdAt, side FROM Order_ WHERE userId = ? AND ticker = ? AND side = ? ORDER BY createdAt DESC";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -128,9 +135,10 @@ public class SelectOrder {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String orderId = rs.getString("orderId");
+                String qty = rs.getString("qty");  // Fetch qty from the database
                 Timestamp createdAt = rs.getTimestamp("createdAt");
 
-                Order order = new Order(id, userId, orderId, ticker, createdAt, side);
+                Order order = new Order(id, userId, orderId, ticker, qty, createdAt, side);  // Pass qty to the constructor
                 orders.add(order);
             }
 
@@ -146,9 +154,10 @@ public class SelectOrder {
         }
     }
 
+    // Select the latest order by user ID
     public Order selectLatestOrderByUserId(Integer userId) {
         Order order = null;
-        String sql = "SELECT id, userId, orderId, ticker, createdAt, side FROM Order_ WHERE userId = ? ORDER BY createdAt DESC LIMIT 1";
+        String sql = "SELECT id, userId, orderId, ticker, qty, createdAt, side FROM Order_ WHERE userId = ? ORDER BY createdAt DESC LIMIT 1";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -159,10 +168,11 @@ public class SelectOrder {
                 int id = rs.getInt("id");
                 String orderId = rs.getString("orderId");
                 String ticker = rs.getString("ticker");
+                String qty = rs.getString("qty");  // Fetch qty from the database
                 Timestamp createdAt = rs.getTimestamp("createdAt");
                 String side = rs.getString("side");
 
-                order = new Order(id, userId, orderId, ticker, createdAt, side);
+                order = new Order(id, userId, orderId, ticker, qty, createdAt, side);  // Pass qty to the constructor
             }
 
             return order;

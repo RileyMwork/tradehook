@@ -49,13 +49,13 @@ public class OrderServiceTests {
         later = Timestamp.valueOf(LocalDateTime.now().plusSeconds(10));
         evenLater = Timestamp.valueOf(LocalDateTime.now().plusSeconds(20));
 
-        order1 = new Order(1, "ORD-1", insertTicker, now, sideBuy);
-        order2 = new Order(1, "ORD-2", selectTicker, now, sideBuy);
-        order3 = new Order(1, "ORD-3", selectTicker, later, sideBuy);
-        order4 = new Order(1, "ORD-4", selectTicker, evenLater, sideBuy);
-        order5 = new Order(1, "ORD-5", selectTicker, evenLater, sideSell);
-        order6 = new Order(1, "ORD-6", deleteTicker, now, sideBuy);
-        otherUserOrder = new Order(2, "ORD-7", deleteTicker, now, sideBuy);
+        order1 = new Order(1, "ORD-1", insertTicker,"1", now, sideBuy);
+        order2 = new Order(1, "ORD-2", selectTicker,"1", now, sideBuy);
+        order3 = new Order(1, "ORD-3", selectTicker,"1", later, sideBuy);
+        order4 = new Order(1, "ORD-4", selectTicker,"1", evenLater, sideBuy);
+        order5 = new Order(1, "ORD-5", selectTicker,"1", evenLater, sideSell);
+        order6 = new Order(1, "ORD-6", deleteTicker,"1", now, sideBuy);
+        otherUserOrder = new Order(2, "ORD-7",  deleteTicker, "1", now, sideBuy);
     }
 
     @Test

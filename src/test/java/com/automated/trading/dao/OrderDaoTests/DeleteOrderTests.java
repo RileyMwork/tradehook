@@ -39,9 +39,9 @@ public class DeleteOrderTests {
 
     @BeforeEach
     void setup() {
-        order1 = new Order(1, "DELTEST-1", "DELTEST", Timestamp.valueOf(LocalDateTime.now()), "buy");
-        order2 = new Order(1, "DELTEST-2", "DELTEST", Timestamp.valueOf(LocalDateTime.now()), "sell");
-        order3 = new Order(2, "DELTEST-3", "OTHERUSER", Timestamp.valueOf(LocalDateTime.now()), "buy");
+        order1 = new Order(1, "DELTEST-1", "DELTEST", "1", Timestamp.valueOf(LocalDateTime.now()), "buy");
+        order2 = new Order(1, "DELTEST-2", "DELTEST", "1", Timestamp.valueOf(LocalDateTime.now()), "sell");
+        order3 = new Order(2, "DELTEST-3", "OTHERUSER", "1", Timestamp.valueOf(LocalDateTime.now()), "buy");
 
         insertOrder.insertOrder(order1);
         insertOrder.insertOrder(order2);

@@ -1,6 +1,7 @@
 package com.automated.trading.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.automated.trading.dao.UserDao.DeleteUser;
 import com.automated.trading.dao.UserDao.InsertUser;
@@ -30,10 +31,13 @@ public class UserService {
     @Autowired
     private DeleteUser deleteUser;
     
+    @Autowired
+private PasswordEncoder passwordEncoder;
+
     public User createNewUser(User user) {
         String email = user.getEmail();
         String password = user.getPassword();
-        
+
         if (email.length() > 64) {
             throw new UserServiceNewUserInfoTooLongException("Email must be less than 64 characters");
         } 
@@ -43,13 +47,16 @@ public class UserService {
         if (selectUser.selectUserByEmail(email) != null) {
             throw new UserServiceUserAlreadyExistsException("User with this email already exists");
         }
-        else {
-            Integer newRow = insertUser.insertUser(user);
-            System.out.println("Rows Created: " + newRow);
-            User newUser = selectUser.selectUserByEmail(email);
-            return newUser;
-        }
+
+        // ✅ Hash the password
+        String hashedPassword = passwordEncoder.encode(password);
+        user.setPassword(hashedPassword);
+
+        Integer newRow = insertUser.insertUser(user);
+        System.out.println("Rows Created: " + newRow);
+        return selectUser.selectUserByEmail(email);
     }
+
 
     public User selectUserByEmail(User user) {
         User selectedUser = selectUser.selectUserByEmail(user.getEmail());
@@ -69,10 +76,10 @@ public class UserService {
         }
     }
 
-    public User selectUserByTradehookApiKey(User user) {
-        User selectedUser = selectUser.selectUserByTradehookApiKey(user.getTradehookApiKey());
+    public User selectUserByTradehookApiKey(String tradehookApiKey) {
+        User selectedUser = selectUser.selectUserByTradehookApiKey(tradehookApiKey);
         if (selectedUser == null) {
-            throw new UserServiceSelectedUserNotFoundException("Could not find User with key: " + user.getTradehookApiKey());
+            throw new UserServiceSelectedUserNotFoundException("Could not find User with key: " + tradehookApiKey);
         } else {
             return selectedUser;
         }
@@ -90,27 +97,6 @@ public class UserService {
             return selectedUser;
         }
     }
-
-    // public User updateUser(User user) {
-    //     String email = user.getEmail();
-    //     try {
-    //         User existingUser = selectUser.selectUserByEmail(email);
-
-    //         if (existingUser == null) {
-    //             throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
-    //         }
-
-    //         existingUser.setAlpacaApiKey(user.getAlpacaApiKey());
-    //         existingUser.setAlpacaSecretKey(user.getAlpacaSecretKey());
-
-    //         updateUser.updateUser(existingUser); 
-
-    //         return existingUser; 
-    //     } catch (UpdateUserDaoNoUserFound e) {
-    //         System.out.println(e.getMessage());
-    //         return null;
-    //     }
-    // }
 
     public User updateAlpacaApiKeys(User user) {
         try {
@@ -182,12 +168,13 @@ public class UserService {
         if (loginUser == null) {
             throw new UserServiceNoUserEmailFoundException("Incorrect login information");
         }
-        String correctPassword = loginUser.getPassword();
-        if (!user.getPassword().equals(correctPassword)) {
+
+        // ✅ Use hashed password check
+        if (!passwordEncoder.matches(user.getPassword(), loginUser.getPassword())) {
             throw new UserServicePasswordIncorrectException("Incorrect login information");
-        } else {
-            return loginUser;
         }
+
+        return loginUser;
     }
 
 }

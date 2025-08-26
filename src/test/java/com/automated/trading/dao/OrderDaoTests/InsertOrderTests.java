@@ -29,7 +29,7 @@ public class InsertOrderTests {
 
     @Test
     public void insertOrderReturnsOneAndCorrectTicker() {
-        Order order = new Order(1, "INSERTORDER001", "INSERT", Timestamp.valueOf(LocalDateTime.now()), "buy");
+        Order order = new Order(1, "INSERTORDER001", "INSERT", "1", Timestamp.valueOf(LocalDateTime.now()), "buy");
         Integer result = insertOrder.insertOrder(order);
 
         List<Order> selected = selectOrder.selectAllOrdersByUserIdAndTickerSortedByCreatedAt(1, "INSERT");

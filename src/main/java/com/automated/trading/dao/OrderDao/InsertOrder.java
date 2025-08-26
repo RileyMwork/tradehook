@@ -17,17 +17,21 @@ public class InsertOrder {
     private DatabaseConnector databaseConnector;
 
     public Integer insertOrder(Order order) {
-        String sql = "INSERT INTO Order_ (userId, orderId, ticker, createdAt, side) VALUES (?, ?, ?, ?, ?)";
+        // Updated SQL to include qty
+        String sql = "INSERT INTO Order_ (userId, orderId, ticker, qty, createdAt, side) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
+            // Set the values for the PreparedStatement, including qty
             pstmt.setInt(1, order.getUserId());
             pstmt.setString(2, order.getOrderId());
             pstmt.setString(3, order.getTicker());
-            pstmt.setTimestamp(4, order.getCreatedAt());
-            pstmt.setString(5, order.getSide());
+            pstmt.setString(4, order.getQty());  // Setting qty
+            pstmt.setTimestamp(5, order.getCreatedAt());
+            pstmt.setString(6, order.getSide());
 
+            // Execute the update
             return pstmt.executeUpdate();
             
         } catch (SQLException e) {

@@ -42,10 +42,10 @@ public class SelectOrderTests {
         Timestamp later = Timestamp.valueOf(LocalDateTime.now().plusSeconds(10));
         Timestamp moreLater = Timestamp.valueOf(LocalDateTime.now().plusSeconds(20));
 
-        insertedOrder1 = new Order(1, "TESTORDERID1", "SELECT", now, "buy");
-        insertedOrder2 = new Order(1, "TESTORDERID2", "SELECT", later, "sell");
-        insertedOrder3 = new Order(1, "TESTORDERID3", "NULL", now, "buy");
-        insertedOrder4 = new Order(1, "TESTORDERID4", "SELECT", moreLater, "buy");
+        insertedOrder1 = new Order(1, "TESTORDERID1", "SELECT","1", now, "buy");
+        insertedOrder2 = new Order(1, "TESTORDERID2", "SELECT","1", later, "sell");
+        insertedOrder3 = new Order(1, "TESTORDERID3", "NULL","1", now, "buy");
+        insertedOrder4 = new Order(1, "TESTORDERID4", "SELECT","1", moreLater, "buy");
 
         insertOrder.insertOrder(insertedOrder1);
         insertOrder.insertOrder(insertedOrder2);

@@ -16,6 +16,8 @@ public class Order {
 
     private String ticker;
 
+    private String qty;  
+
     private Timestamp createdAt;
 
     private String side;
@@ -23,22 +25,32 @@ public class Order {
     public Order() {
     }
 
-    public Order(Integer userId, String orderId, String ticker, Timestamp createdAt, String side) {
+    public Order(String ticker, String qty, String side) {
+        this.ticker = ticker;
+        this.qty = qty;
+        this.side = side;
+    }
+
+    public Order(Integer userId, String orderId, String ticker, String qty, Timestamp createdAt, String side) {
         this.userId = userId;
         this.orderId = orderId;
         this.ticker = ticker;
+        this.qty = qty;
         this.createdAt = createdAt;
         this.side = side;
     }
 
-    public Order(Integer id, Integer userId, String orderId, String ticker, Timestamp createdAt, String side) {
+    public Order(Integer id, Integer userId, String orderId, String ticker, String qty, Timestamp createdAt, String side) {
         this.id = id;
-        this.orderId = orderId;
         this.userId = userId;
+        this.orderId = orderId;
         this.ticker = ticker;
+        this.qty = qty;
         this.createdAt = createdAt;
         this.side = side;
     }
+
+    // Getters and Setters
 
     public Integer getId() {
         return id;
@@ -48,11 +60,11 @@ public class Order {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -72,6 +84,14 @@ public class Order {
         this.ticker = ticker;
     }
 
+    public String getQty() {  // Getter for qty
+        return qty;
+    }
+
+    public void setQty(String qty) {  // Setter for qty
+        this.qty = qty;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -88,6 +108,7 @@ public class Order {
         this.side = side;
     }
 
+    // Overriding equals method to include qty
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -99,12 +120,14 @@ public class Order {
         if (id != null ? !id.equals(other.id) : other.id != null) return false;
         if (orderId != null ? !orderId.equals(other.orderId) : other.orderId != null) return false;
         if (ticker != null ? !ticker.equals(other.ticker) : other.ticker != null) return false;
+        if (qty != null ? !qty.equals(other.qty) : other.qty != null) return false;  // Include qty in equals check
         if (createdAt != null ? !createdAt.equals(other.createdAt) : other.createdAt != null) return false;
         if (side != null ? !side.equals(other.side) : other.side != null) return false;
 
         return true;
     }
 
+    // Overriding toString method to include qty
     @Override
     public String toString() {
         return "Order{" +
@@ -112,6 +135,7 @@ public class Order {
                 ", userId=" + userId +
                 ", orderId='" + orderId + '\'' +
                 ", ticker='" + ticker + '\'' +
+                ", qty='" + qty + '\'' +  // Include qty in the toString output
                 ", createdAt=" + createdAt +
                 ", side='" + side + '\'' +
                 '}';

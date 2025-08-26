@@ -91,8 +91,8 @@ public class UserServiceTests {
 
     @Test
     public void selectValidUserByTradehookApiKeyReturnsValidUser() {
-        User createdUserWithKey = userService.selectUserByTradehookApiKey(validUser);
-        User createdUser = userService.selectUserByTradehookApiKey(createdUserWithKey);
+        User createdUserWithKey = userService.selectUserByTradehookApiKey(validUser.getTradehookApiKey());
+        User createdUser = userService.selectUserByTradehookApiKey(createdUserWithKey.getTradehookApiKey());
         assertEquals(validUser.getTradehookApiKey(), createdUser.getTradehookApiKey());
     }
 
