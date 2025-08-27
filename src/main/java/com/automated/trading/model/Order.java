@@ -31,6 +31,14 @@ public class Order {
         this.side = side;
     }
 
+    public Order(String orderId, String ticker, String qty, Timestamp createdAt, String side) {
+        this.orderId = orderId;
+        this.ticker = ticker;
+        this.qty = qty;
+        this.createdAt = createdAt;
+        this.side = side;
+    }
+
     public Order(Integer userId, String orderId, String ticker, String qty, Timestamp createdAt, String side) {
         this.userId = userId;
         this.orderId = orderId;

@@ -124,9 +124,9 @@ public class UserServiceTests {
     @Test
     public void updateValidUserTradehookKeyReturnsUpdatedUser() {
         User userToUpdate = userService.selectUserByEmail(validUser);
-        User updatedUserInfo = new User(userToUpdate.getId(),userToUpdate.getEmail(),userToUpdate.getPassword(),"UPDATEDTRADEHOOKKEY",userToUpdate.getAlpacaApiKey(),userToUpdate.getAlpacaSecretKey());
-        User postUpdateUser = userService.updateTradehookApiKey(updatedUserInfo);
-        assertEquals(updatedUserInfo, postUpdateUser);    
+        String previousTradehookApiKey = validUser.getTradehookApiKey();
+        User postUpdateUser = userService.updateTradehookApiKey(userToUpdate);
+        assertNotEquals(postUpdateUser.getTradehookApiKey(),previousTradehookApiKey);    
     }
 
     @Test

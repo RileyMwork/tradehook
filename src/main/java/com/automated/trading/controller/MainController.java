@@ -36,8 +36,9 @@ public class MainController {
     public ResponseEntity<?> createUser(@RequestBody User user,HttpSession session) {
         try {
             User createdUser = userService.createNewUser(user);
+            User returnedUser = new User(createdUser.getEmail());
             session.setAttribute("email", createdUser.getEmail());
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);  // Return user with 201 Created status
+            return new ResponseEntity<>(returnedUser, HttpStatus.CREATED);  // Return user with 201 Created status
         } catch (UserServiceNewUserInfoTooLongException | UserServiceUserAlreadyExistsException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>((e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -48,8 +49,9 @@ public class MainController {
     public ResponseEntity<?> loginUser(@RequestBody User user, HttpSession session) {
         try {
             User loginUser = userService.login(user);
+            User returnedUser = new User(loginUser.getEmail());
             session.setAttribute("email", loginUser.getEmail());
-            return new ResponseEntity<>(loginUser, HttpStatus.OK);
+            return new ResponseEntity<>(returnedUser, HttpStatus.OK);
         } catch (UserServiceNoUserEmailFoundException | UserServicePasswordIncorrectException e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -57,53 +59,32 @@ public class MainController {
     }
 
     @PutMapping("user/alpaca-keys/update")
-    public ResponseEntity<?> updateUserAlpacaKeys(@RequestBody User user, HttpSession session) {
+    public ResponseEntity<String> updateUserAlpacaKeys(@RequestBody User user, HttpSession session) {
         String email = (String) session.getAttribute("email");
-
-        // Check if user is authenticated
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-
-        // Set the email field in the user object before passing it to the service method
         user.setEmail(email);
-
-        // Call the service method to update the alpaca keys
         User updatedUser = userService.updateAlpacaApiKeys(user);
-
-        // Return updated user information in response
         if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            return new ResponseEntity<>("Alpaca Api Keys Have Been Updated Successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Failed to update Alpaca keys", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("user/tradehook-key/update")
-    public ResponseEntity<?> updateUserTradehookKey(@RequestBody User user, HttpSession session) {
+    public ResponseEntity<String> updateUserTradehookKey(HttpSession session) {
         String email = (String) session.getAttribute("email");
-    
-        // Check if user is authenticated
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-    
-        // Set the email field in the user object before passing it to the service method
-        user.setEmail(email);
-    
-        // Call the service method to update the alpaca keys
-        User updatedUser = userService.updateTradehookApiKey(user);
-        
-        // Return updated user information in response
-        if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Failed to update Tradehook key", HttpStatus.BAD_REQUEST);
-        }
+        userService.updateTradehookApiKey(new User(email)); 
+        return new ResponseEntity<>("Tradehook Api Key Updated Successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("user/delete")
-    public ResponseEntity<?> deleteUser(HttpSession session) {
+    public ResponseEntity<String> deleteUser(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
@@ -111,6 +92,17 @@ public class MainController {
         User currentUser = new User(email);
         userService.deleteUserByEmail(currentUser);
         return new ResponseEntity<>("User Deleted",HttpStatus.OK);
+    }
+
+    @GetMapping("order/list")
+    public ResponseEntity<?> listOrders(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        User currentUser = userService.selectUserByEmail(new User(email));
+        Integer userId = currentUser.getId();
+        return new ResponseEntity<>(orderService.selectAllOrdersByUserId(userId), HttpStatus.OK);
     }
 
     @PostMapping("order/create")
@@ -153,9 +145,10 @@ public class MainController {
 
             // Persist the order
             Order persistedOrder = orderService.createNewOrder(orderToPersist);
+            Order returnedOrder = new Order(persistedOrder.getOrderId(), persistedOrder.getTicker(), persistedOrder.getQty(), persistedOrder.getCreatedAt(), persistedOrder.getSide());
 
             // Return the persisted order with a 201 Created status
-            return new ResponseEntity<>(persistedOrder, HttpStatus.CREATED);
+            return new ResponseEntity<>(returnedOrder, HttpStatus.CREATED);
         }
     }
 

@@ -15,6 +15,7 @@ import com.automated.trading.exception.serviceexceptions.UserServicePasswordInco
 import com.automated.trading.exception.serviceexceptions.UserServiceSelectedUserNotFoundException;
 import com.automated.trading.exception.serviceexceptions.UserServiceUserAlreadyExistsException;
 import com.automated.trading.model.User;
+import java.util.UUID;
 
 @Component
 public class UserService {
@@ -130,15 +131,13 @@ private PasswordEncoder passwordEncoder;
             if (existingUser == null) {
                 throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
             }
+            UUID uuid = UUID.randomUUID();
+            String randomTradehookKey = uuid.toString();
+            user.setTradehookApiKey(randomTradehookKey);
 
-            // Update the existing user's alpacaApiKey and alpacaSecretKey
-            existingUser.setTradehookApiKey(user.getTradehookApiKey());
+            updateUser.updateUserTradehookKey(user);
 
-            // Persist the updated user (if your `updateUser` method saves changes)
-            updateUser.updateUserTradehookKey(existingUser);
-
-            // Return the updated user
-            return existingUser;
+            return user;
         } catch (UpdateUserDaoNoUserFound e) {
             System.out.println(e.getMessage());
             return null;
