@@ -3,6 +3,8 @@ package com.automated.trading.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import com.automated.trading.dao.UserDao.DeleteUser;
 import com.automated.trading.dao.UserDao.InsertUser;
 import com.automated.trading.dao.UserDao.SelectUser;
@@ -15,6 +17,9 @@ import com.automated.trading.exception.serviceexceptions.UserServicePasswordInco
 import com.automated.trading.exception.serviceexceptions.UserServiceSelectedUserNotFoundException;
 import com.automated.trading.exception.serviceexceptions.UserServiceUserAlreadyExistsException;
 import com.automated.trading.model.User;
+
+import jakarta.servlet.http.HttpSession;
+
 import java.util.UUID;
 
 @Component
@@ -174,6 +179,12 @@ private PasswordEncoder passwordEncoder;
         }
 
         return loginUser;
+    }
+
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Ends the session
+        return "redirect:/tradehook/login"; // Redirect to login page
     }
 
 }

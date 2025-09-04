@@ -56,6 +56,13 @@ public class MainController {
         return "login";
     }
 
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Ends the session
+        return "redirect:/tradehook/login"; // Redirect to login page
+    }
+
+
     @PostMapping("authenticate-user")
     public ResponseEntity<?> loginUser(@RequestBody User user, HttpSession session) {
         try {
@@ -70,9 +77,15 @@ public class MainController {
     }
 
     @GetMapping("/home")
-    public String showHomePage() {
-        return "home"; // This corresponds to 'register.html' in /templates
+    public String showHomePage(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return "redirect:/tradehook/login"; // redirect to login if not authenticated
+        }
+        return "home"; // this corresponds to 'home.html' in /templates
     }
+
+
 
     @PutMapping("user/alpaca-keys/update")
     public ResponseEntity<String> updateUserAlpacaKeys(@RequestBody User user, HttpSession session) {
@@ -110,17 +123,6 @@ public class MainController {
         User selectedUser = userService.selectUserByEmail(user);
         String newKey = selectedUser.getTradehookApiKey();
         return new ResponseEntity<>(newKey, HttpStatus.OK);
-    }
-
-    @DeleteMapping("user/delete")
-    public ResponseEntity<String> deleteUser(HttpSession session) {
-        String email = (String) session.getAttribute("email");
-        if (email == null) {
-            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
-        }
-        User currentUser = new User(email);
-        userService.deleteUserByEmail(currentUser);
-        return new ResponseEntity<>("User Deleted",HttpStatus.OK);
     }
 
     @GetMapping("order/list")
@@ -179,6 +181,19 @@ public class MainController {
             // Return the persisted order with a 201 Created status
             return new ResponseEntity<>(returnedOrder, HttpStatus.CREATED);
         }
+    }
+
+    @DeleteMapping("user/delete")
+    public ResponseEntity<String> deleteUser(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        User currentUser = new User(email);
+        User selectedUser = userService.selectUserByEmail(currentUser);
+        orderService.deleteOrdersByUserId(selectedUser.getId());
+        userService.deleteUserByEmail(currentUser);
+        return new ResponseEntity<>("User Deleted",HttpStatus.OK);
     }
 
 }

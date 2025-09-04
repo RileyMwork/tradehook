@@ -1,3 +1,10 @@
+/* * {
+    overflow-y: hidden;
+} */
+.main-container {
+    grid-template-columns: 1fr 2fr;
+}
+
 .form-container{
     grid-column: 1 / 2;
     width: 30dvw;
@@ -27,6 +34,20 @@
 
 .form-container:nth-of-type(2){
     grid-row: 2 / 4;
+    display: grid;
+    height: 75%;
+    align-self: center;
+}
+
+.form-container:nth-of-type(2) .form-heading{
+    align-self: center;
+    font-size: 2rem;
+}
+
+.form-container:nth-of-type(2) h3{
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
 }
 
 h3{
@@ -42,7 +63,8 @@ h3{
 }
 
 #tradehook-api-form-template{
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 5px;
 }
 
 .form-button{
@@ -52,7 +74,7 @@ h3{
 .order-list-container {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
-    width: 45dvw;
+    width: 55dvw;
     max-width: 1600px;
     background: #F8F9FD;
     background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
@@ -77,7 +99,7 @@ h3{
 }
 
 .order-table th {
-    background-color: #e0f2f1;
+    background-color: #ebfcf3;
     color: #144232;
 }
 
@@ -95,7 +117,7 @@ h3{
 .guide-container {
     grid-column: 2 / 3;
     grid-row: 2 / 4;
-    width: 45dvw;
+    width: 55dvw;
     max-width: 1600px;
     background: #F8F9FD;
     background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
@@ -131,17 +153,49 @@ h3{
 
 .gen-del-button {
     padding: 1em 2em;
-    
+    margin: 0;
 }
 
 .example-img {
     cursor: pointer;
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.pagination-container button {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background-color: #144232;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#page-info {
+    font-weight: bold;
+}
+
+
 
 /* ========= Responsive Enhancements ========= */
 
 @media (max-width: 1024px) {
+
+    html,body {
+        overflow-y: auto;
+    }
 
     .form-container {
         width: 80dvw;
