@@ -1,0 +1,90 @@
+* {
+  --primary-color: #227256;
+  --secondary-color: #144232;
+  --background-color: #F8F9FD;
+}
+
+.form-container {
+    width: 50dvw;
+    max-width: 800px;
+    background: #F8F9FD;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+    border-radius: 20px;
+    padding: 25px 35px;
+    border: 5px solid rgb(223, 245, 232);
+    height: auto;
+    max-height: auto;
+}
+
+.form-heading {
+  text-align: center;
+  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+}
+
+.form-template {
+  margin-top: 20px;
+  max-width: 750px;
+  display: grid;
+  gap: 20px;
+}
+
+.form-input {
+    justify-self: center;
+  width: 90%;
+  background: white;
+  border: none;
+  padding: 25px 30px;
+  border-radius: 20px;
+  margin-top: 15px;
+  border: 1px solid rgb(237, 237, 237);
+  box-shadow: #cff0ff 0px 8px 8px -5px;
+  /* border-inline: 4px solid transparent; */
+  transition: all 0.2s ease-in-out;
+  font-size: 16px;
+}
+
+.form-input::-moz-placeholder {
+  color: rgb(170, 170, 170);
+}
+
+.form-input::placeholder {
+  color: var(--primary-color);
+    font-size: 16px;
+}
+
+
+.form-input:focus {
+  outline: none;
+}
+
+.form-input:hover {
+  outline: none;
+  transform: scale(1.02);
+  border: 1px solid var(--primary-color);
+} 
+
+.form-question {
+    text-align: center;
+    font-size: 18px;
+    color: var(--primary-color);
+    margin-top: 10px;
+}
+
+.form-question a{
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-question a:hover{
+    font-size: 19px;
+    color: var(--secondary-color);
+}
+
+
+
+

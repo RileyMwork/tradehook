@@ -1,0 +1,36 @@
+* {
+  --primary-color: #227256;
+}
+
+.form-button {
+  padding: 1.3em 3em;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: var(--primary-color);
+  background-color: #fff;
+  border: 1px solid rgb(237, 237, 237);
+  border-radius: 85px;
+  /* box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); */
+  box-shadow: #cff0ff 0px 8px 8px -5px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  width: auto;
+  align-self: center;
+  justify-self: center;
+
+}
+
+.form-button:hover {
+  background-color: var(--primary-color);
+  /* box-shadow: 0px 15px 20px #639886; */
+  box-shadow: #cff0ff 0px 8px 8px -5px;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.form-button:active {
+  transform: translateY(2px);
+}

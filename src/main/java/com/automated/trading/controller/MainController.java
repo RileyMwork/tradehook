@@ -2,10 +2,11 @@ package com.automated.trading.controller;
 
 import java.sql.Timestamp;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.automated.trading.alpaca.PlaceOrder;
 import com.automated.trading.exception.serviceexceptions.UserServiceNewUserInfoTooLongException;
@@ -18,7 +19,7 @@ import com.automated.trading.service.OrderService;
 import com.automated.trading.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
-@RestController
+@Controller
 @RequestMapping("/tradehook/")
 public class MainController {
 
@@ -31,7 +32,11 @@ public class MainController {
     @Autowired
     private PlaceOrder placeOrder;
 
-    // POST /api/user/create
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "register"; // This corresponds to 'register.html' in /templates
+    }
+
     @PostMapping("user/create")
     public ResponseEntity<?> createUser(@RequestBody User user,HttpSession session) {
         try {
@@ -45,7 +50,13 @@ public class MainController {
         }
     }
 
-    @PostMapping("user/login")
+    @GetMapping("/login")
+    public String showLoginPage(Model model) {
+        model.addAttribute("user", new User());  // for form binding
+        return "login";
+    }
+
+    @PostMapping("authenticate-user")
     public ResponseEntity<?> loginUser(@RequestBody User user, HttpSession session) {
         try {
             User loginUser = userService.login(user);
@@ -56,6 +67,11 @@ public class MainController {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/home")
+    public String showHomePage() {
+        return "home"; // This corresponds to 'register.html' in /templates
     }
 
     @PutMapping("user/alpaca-keys/update")
@@ -73,14 +89,27 @@ public class MainController {
         }
     }
 
+    @GetMapping("user/tradehook-key")
+    public ResponseEntity<?> getUserTradehookKey(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        String key = userService.selectUserByEmail(new User(email)).getTradehookApiKey();
+        return new ResponseEntity<>(key, HttpStatus.OK);
+    }
+
     @PutMapping("user/tradehook-key/update")
     public ResponseEntity<String> updateUserTradehookKey(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-        userService.updateTradehookApiKey(new User(email)); 
-        return new ResponseEntity<>("Tradehook Api Key Updated Successfully", HttpStatus.OK);
+        User user = new User(email);
+        userService.updateTradehookApiKey(user);
+        User selectedUser = userService.selectUserByEmail(user);
+        String newKey = selectedUser.getTradehookApiKey();
+        return new ResponseEntity<>(newKey, HttpStatus.OK);
     }
 
     @DeleteMapping("user/delete")

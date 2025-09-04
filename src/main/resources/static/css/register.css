@@ -1,0 +1,22 @@
+/* * {
+    overflow-y: hidden;
+} */
+
+.form-container {
+    grid-column: 1 / 3;
+    grid-row: 1 / 5;
+    height: auto;
+    justify-content: center;
+    justify-self: center;
+    align-content: center;
+    align-items: center;
+    align-self: flex-start;
+}
+
+.form-input {
+    margin: 0;
+}
+
+.form-question {
+    margin: 0;
+}

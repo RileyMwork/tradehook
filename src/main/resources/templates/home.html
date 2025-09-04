@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/background.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+    <link rel="stylesheet" th:href="@{/css/button.css}">
+    <link rel="stylesheet" th:href="@{/css/main_container.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/title.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<header>
+    <button class="button" data-text="Awesome">
+        <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
+        <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
+    </button>
+</header>
+
+<body>
+
+    <div class="background"></div>
+    <main class="main-container">
+        <div class="form-container" id="alpaca-api-container">
+            <div class="form-heading">Alpaca API Keys</div>
+                <form action="" class="form-template" id="alpaca-form">
+                    <input class="form-input" type="password" name="alpaca-api-key" id="alpaca-api-key" placeholder="Alpaca API Key">
+                    <input class="form-input" type="password" name="alpaca-secret-key" id="alpaca-secret-key" placeholder="Alpaca Secret Key">
+                    <button class="form-button btn" type="submit" id="alpaca-submit">Submit</button>
+                </form>
+            <div id="alpaca-success-message" class="success-message"></div>
+
+            </div>
+        </div>
+
+        <div class="form-container" id="tradehook-api-container">
+            <div class="form-heading">Tradehook API Key</div>
+                <form action="" class="form-template" id="tradehook-api-form-template">
+                    <h3 id="tradehook-api-key">Loading API key...</h3>
+                    <button id="generate-tradehook-key-button" class="form-button btn gen-del-button" type="button">Generate</button>
+                    <button class="form-button btn gen-del-button" type="button">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="order-list-container">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Ticker</th>
+                        <th>Side</th>
+                        <th>Qty</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody id="order-table-body">
+                    <!-- Orders will be injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="guide-container">
+            <p class="example-intro">Here is a simple snippet to help you start automating your trades through TradingView alerts</p>
+            <!-- <img class="example-img" th:src="@{/images/example.PNG}" alt="example code snippet"> -->
+            <a href="/images/example.PNG" target="_blank" rel="noopener">
+                <img class="example-img" src="/images/example.PNG" alt="example code snippet" style="cursor: pointer;">
+            </a>
+
+            <p class="code-to-copy">alert('{"ticker": ' + syminfo.ticker + ', "qty": ' + str.tostring(qty) + ', "side": "buy","tradhook_api_key":"b5f11f48-24d6-461b-9868-d11d2bd52134"}',freq=alert.freq_once_per_bar_close)</p>
+        </div>
+    </main>
+
+
+<script th:src="@{/js/home.js}" defer></script>
+</body>
+</html>

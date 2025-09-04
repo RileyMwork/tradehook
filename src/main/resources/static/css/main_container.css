@@ -1,0 +1,16 @@
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: 20px; 
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+
+    justify-content: center;
+    align-content: start;
+    justify-items: center;
+    align-items: start;
+}

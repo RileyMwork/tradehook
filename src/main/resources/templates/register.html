@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <!-- <link rel="stylesheet" href="/frontendtest/css/background.css">
+    <link rel="stylesheet" href="/frontendtest/css/form.css">
+    <link rel="stylesheet" href="/frontendtest/css/button.css">
+    <link rel="stylesheet" href="/frontendtest/css/main_container.css">
+    <link rel="stylesheet" href="/frontendtest/css/register.css">
+    <link rel="stylesheet" href="/frontendtest/css/title.css"> -->
+    <link rel="stylesheet" th:href="@{/css/background.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+    <link rel="stylesheet" th:href="@{/css/button.css}">
+    <link rel="stylesheet" th:href="@{/css/main_container.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/title.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<header>
+    <button class="button" data-text="Awesome">
+        <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
+        <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
+    </button>
+</header>
+
+<body>
+
+
+    <div class="background"></div>
+    <main class="main-container">
+        <div class="form-container">
+            <div class="form-heading">Register</div>
+                <form id="register-form" action="" class="form-template">
+                    <input required="" class="form-input" type="email" name="email" id="email" placeholder="Email">
+                    <input required="" class="form-input" type="password" name="password" id="password" placeholder="Password">
+                    <input class="form-input" type="text" name="alpaca-api-key" id="alpaca-api-key" placeholder="Alpaca API Key (Optional)">
+                    <input class="form-input" type="password" name="alpaca-secret-key" id="alpaca-secret-key" placeholder="Alpaca Secret Key (Optional)">
+                    <button class="form-button btn" type="submit">Submit</button>
+                    <div class="form-question">Have an account? <a href="http://localhost:8080/tradehook/login">Sign In!</a></div>
+                    <div id="error-message" style="color:red; display:none;">
+                        <p id="error-text"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+<script th:src="@{/js/register.js}" defer></script>
+</body>
+</html>
