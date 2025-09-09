@@ -78,11 +78,11 @@
         <div class="guide-container">
             <p class="example-intro">Here is a simple snippet to help you start automating your trades through TradingView alerts</p>
             <!-- <img class="example-img" th:src="@{/images/example.PNG}" alt="example code snippet"> -->
-            <a href="/images/example.PNG" target="_blank" rel="noopener">
-                <img class="example-img" src="/images/example.PNG" alt="example code snippet" style="cursor: pointer;">
+            <a href="/images/tradehook-img.png" target="_blank" rel="noopener">
+                <img class="example-img" src="/images/tradehook-img.png" alt="example code snippet" style="cursor: pointer;">
             </a>
 
-            <p class="code-to-copy">alert('{"ticker": ' + syminfo.ticker + ', "qty": ' + str.tostring(qty) + ', "side": "buy","tradhook_api_key":"b5f11f48-24d6-461b-9868-d11d2bd52134"}',freq=alert.freq_once_per_bar_close)</p>
+            <p class="code-to-copy">alert('{"ticker": "' + syminfo.ticker + '", "qty": "' + str.tostring(qty) + '", "side": "buy","tradehookApiKey":"YOUR TRADEHOOK API KEY"}',freq=alert.freq_once_per_bar_close)</p>
         </div>
     </main>
 
