@@ -2,12 +2,19 @@ package com.automated.trading.controller;
 
 import java.sql.Timestamp;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.automated.trading.alpaca.PlaceOrder;
 import com.automated.trading.exception.serviceexceptions.UserServiceNewUserInfoTooLongException;
 import com.automated.trading.exception.serviceexceptions.UserServiceNoUserEmailFoundException;
@@ -17,10 +24,11 @@ import com.automated.trading.model.Order;
 import com.automated.trading.model.User;
 import com.automated.trading.service.OrderService;
 import com.automated.trading.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/tradehook/")
+@RequestMapping("/")
 public class MainController {
 
     @Autowired
@@ -32,7 +40,7 @@ public class MainController {
     @Autowired
     private PlaceOrder placeOrder;
 
-    @GetMapping("/register")
+    @GetMapping("register")
     public String showRegisterPage() {
         return "register"; // This corresponds to 'register.html' in /templates
     }
@@ -50,7 +58,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("/login")
+    @GetMapping("login")
     public String showLoginPage(Model model) {
         model.addAttribute("user", new User());  // for form binding
         return "login";
@@ -76,7 +84,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("/home")
+    @GetMapping("home")
     public String showHomePage(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
