@@ -3,7 +3,7 @@ let currentPage = 1;
 const ordersPerPage = 5;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadTradehookApiKey();
+    await loadWebhookTradingApiKey();
     await loadOrderList();
 
     // Pagination button events
@@ -24,10 +24,10 @@ document.getElementById('next-page').addEventListener('click', () => {
 
 });
 
-async function loadTradehookApiKey() {
+async function loadWebhookTradingApiKey() {
     try {
-        const response = await fetch('/tradehook/user/tradehook-key');
-        const container = document.getElementById('tradehook-api-form-template');
+        const response = await fetch('/user/webhooktrading-key');
+        const container = document.getElementById('webhooktrading-api-form-template');
 
         if (response.ok) {
             const apiKey = await response.text();
@@ -36,13 +36,13 @@ async function loadTradehookApiKey() {
             container.querySelector('h3').textContent = 'Failed to load API key';
         }
     } catch (err) {
-        console.error('Error fetching Tradehook API key:', err);
+        console.error('Error fetching WebhookTrading API key:', err);
     }
 }
 
 async function loadOrderList() {
     try {
-        const response = await fetch('/tradehook/order/list');
+        const response = await fetch('order/list');
         const tableBody = document.getElementById('order-table-body');
 
         if (!response.ok) {
@@ -126,7 +126,7 @@ document.getElementById('alpaca-form').addEventListener('submit', async (e) => {
     };
 
     try {
-        const res = await fetch('/tradehook/user/alpaca-keys/update', {
+        const res = await fetch('/user/alpaca-keys/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -149,19 +149,19 @@ document.getElementById('alpaca-form').addEventListener('submit', async (e) => {
     }
 });
 
-document.getElementById('generate-tradehook-key-button').addEventListener('click', async (e) => {
+document.getElementById('generate-webhooktrading-key-button').addEventListener('click', async (e) => {
     e.preventDefault();
 
     try {
-        const res = await fetch('/tradehook/user/tradehook-key/update', {
+        const res = await fetch('/user/webhooktrading-key/update', {
             method: 'PUT'
         });
 
         if (res.ok) {
             const newKey = await res.text();
-            document.getElementById('tradehook-api-key').textContent = newKey;
+            document.getElementById('webhooktrading-api-key').textContent = newKey;
         } else {
-            alert('Failed to generate new Tradehook API key.');
+            alert('Failed to generate new WebhookTrading API key.');
         }
     } catch (err) {
         console.error('Error:', err);

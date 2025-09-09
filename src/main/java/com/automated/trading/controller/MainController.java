@@ -40,6 +40,16 @@ public class MainController {
     @Autowired
     private PlaceOrder placeOrder;
 
+    @GetMapping("")
+    public String redirectToProperPage(HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        if (email != null) {
+            return "redirect:/home";  // Authenticated users → /home
+        } else {
+            return "redirect:/login"; // Unauthenticated users → /login
+        }
+    }
+
     @GetMapping("register")
     public String showRegisterPage() {
         return "register"; // This corresponds to 'register.html' in /templates
@@ -67,7 +77,7 @@ public class MainController {
     @GetMapping("logout")
     public String logout(HttpSession session) {
         session.invalidate(); // Ends the session
-        return "redirect:/tradehook/login"; // Redirect to login page
+        return "redirect:/login"; // Redirect to login page
     }
 
 
@@ -88,7 +98,7 @@ public class MainController {
     public String showHomePage(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
-            return "redirect:/tradehook/login"; // redirect to login if not authenticated
+            return "redirect:/login"; // redirect to login if not authenticated
         }
         return "home"; // this corresponds to 'home.html' in /templates
     }
@@ -110,26 +120,26 @@ public class MainController {
         }
     }
 
-    @GetMapping("user/tradehook-key")
-    public ResponseEntity<?> getUserTradehookKey(HttpSession session) {
+    @GetMapping("user/webhooktrading-key")
+    public ResponseEntity<?> getUserWebhookTradingKey(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
-        String key = userService.selectUserByEmail(new User(email)).getTradehookApiKey();
+        String key = userService.selectUserByEmail(new User(email)).getWebhookTradingApiKey();
         return new ResponseEntity<>(key, HttpStatus.OK);
     }
 
-    @PutMapping("user/tradehook-key/update")
-    public ResponseEntity<String> updateUserTradehookKey(HttpSession session) {
+    @PutMapping("user/webhooktrading-key/update")
+    public ResponseEntity<String> updateUserWebhookTradingKey(HttpSession session) {
         String email = (String) session.getAttribute("email");
         if (email == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
         User user = new User(email);
-        userService.updateTradehookApiKey(user);
+        userService.updateWebhookTradingApiKey(user);
         User selectedUser = userService.selectUserByEmail(user);
-        String newKey = selectedUser.getTradehookApiKey();
+        String newKey = selectedUser.getWebhookTradingApiKey();
         return new ResponseEntity<>(newKey, HttpStatus.OK);
     }
 
@@ -146,18 +156,18 @@ public class MainController {
 
     @PostMapping("order/create")
     public ResponseEntity<?> createOrder(@RequestBody Map<String, Object> requestBody) {
-        // Extract tradehookApiKey and other order details from the request map
-        String tradehookApiKey = (String) requestBody.get("tradehookApiKey");
+        // Extract webhooktradingApiKey and other order details from the request map
+        String webhooktradingApiKey = (String) requestBody.get("webhooktradingApiKey");
         String ticker = (String) requestBody.get("ticker");
         String qty = (String) requestBody.get("qty");
         String side = (String) requestBody.get("side");
 
-        // Find the user by tradehookApiKey
-        User selectedUser = userService.selectUserByTradehookApiKey(tradehookApiKey);
+        // Find the user by webhooktradingApiKey
+        User selectedUser = userService.selectUserByWebhookTradingApiKey(webhooktradingApiKey);
 
         // Handle the case where no user was found
         if (selectedUser == null) {
-            return new ResponseEntity<>("User not found for provided Tradehook API Key", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User not found for provided WebhookTrading API Key", HttpStatus.BAD_REQUEST);
         }
 
         // Get Alpaca API keys for the selected user

@@ -48,7 +48,7 @@ public class UpdateUserTests {
     }
 
     @Test
-    public void testUpdateUserTradehookKeyReturnsOneAndUpdatesFields() {
+    public void testUpdateUserWebhookTradingKeyReturnsOneAndUpdatesFields() {
         String originalEmail = "otherUpdateTest@email.com";
         String originalPassword = "originalPassword";
         User userToInsert = new User(originalEmail, originalPassword);
@@ -57,14 +57,14 @@ public class UpdateUserTests {
 
         User user = selectUser.selectUserByEmail(originalEmail);
         assertNotNull(user);
-        user.setTradehookApiKey("updatedTradehookApiKey");
+        user.setWebhookTradingApiKey("updatedWebhookTradingApiKey");
 
-        Integer updated = updateUser.updateUserTradehookKey(user);
+        Integer updated = updateUser.updateUserWebhookTradingKey(user);
         assertEquals(1, updated);
 
         User updatedUser = selectUser.selectUserById(user.getId());
         assertNotNull(updatedUser);
-        assertEquals("updatedTradehookApiKey", updatedUser.getTradehookApiKey());
+        assertEquals("updatedWebhookTradingApiKey", updatedUser.getWebhookTradingApiKey());
     }
 
     @Test

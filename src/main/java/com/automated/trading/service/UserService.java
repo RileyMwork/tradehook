@@ -1,5 +1,7 @@
 package com.automated.trading.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,8 +21,6 @@ import com.automated.trading.exception.serviceexceptions.UserServiceUserAlreadyE
 import com.automated.trading.model.User;
 
 import jakarta.servlet.http.HttpSession;
-
-import java.util.UUID;
 
 @Component
 public class UserService {
@@ -82,10 +82,10 @@ private PasswordEncoder passwordEncoder;
         }
     }
 
-    public User selectUserByTradehookApiKey(String tradehookApiKey) {
-        User selectedUser = selectUser.selectUserByTradehookApiKey(tradehookApiKey);
+    public User selectUserByWebhookTradingApiKey(String webhooktradingApiKey) {
+        User selectedUser = selectUser.selectUserByWebhookTradingApiKey(webhooktradingApiKey);
         if (selectedUser == null) {
-            throw new UserServiceSelectedUserNotFoundException("Could not find User with key: " + tradehookApiKey);
+            throw new UserServiceSelectedUserNotFoundException("Could not find User with key: " + webhooktradingApiKey);
         } else {
             return selectedUser;
         }
@@ -128,7 +128,7 @@ private PasswordEncoder passwordEncoder;
         }
     }
 
-    public User updateTradehookApiKey(User user) {
+    public User updateWebhookTradingApiKey(User user) {
         try {
             String email = user.getEmail();
             User existingUser = selectUser.selectUserByEmail(email);
@@ -137,10 +137,10 @@ private PasswordEncoder passwordEncoder;
                 throw new UserServiceSelectedUserNotFoundException("User not found with email: " + email);
             }
             UUID uuid = UUID.randomUUID();
-            String randomTradehookKey = uuid.toString();
-            user.setTradehookApiKey(randomTradehookKey);
+            String randomWebhookTradingKey = uuid.toString();
+            user.setWebhookTradingApiKey(randomWebhookTradingKey);
 
-            updateUser.updateUserTradehookKey(user);
+            updateUser.updateUserWebhookTradingKey(user);
 
             return user;
         } catch (UpdateUserDaoNoUserFound e) {
@@ -184,7 +184,7 @@ private PasswordEncoder passwordEncoder;
     @GetMapping("logout")
     public String logout(HttpSession session) {
         session.invalidate(); // Ends the session
-        return "redirect:/tradehook/login"; // Redirect to login page
+        return "redirect:/webhooktrading/login"; // Redirect to login page
     }
 
 }

@@ -3,11 +3,13 @@ package com.automated.trading.dao.UserDao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.automated.trading.exception.daoexceptions.userdaoexceptions.UpdateUserDaoNoUserFound;
-import com.automated.trading.util.DatabaseConnector;
-import com.automated.trading.model.User;  // Import the User model class
+import com.automated.trading.model.User;
+import com.automated.trading.util.DatabaseConnector;  // Import the User model class
 
 @Component
 public class UpdateUser {
@@ -39,15 +41,15 @@ public class UpdateUser {
         }
     }
 
-    // Method to update the Tradehook API key
-    public Integer updateUserTradehookKey(User user) {
-        String sql = "UPDATE User SET tradehookApiKey = ? WHERE email = ?";
+    // Method to update the WebhookTrading API key
+    public Integer updateUserWebhookTradingKey(User user) {
+        String sql = "UPDATE User SET webhooktradingApiKey = ? WHERE email = ?";
 
         try (Connection conn = databaseConnector.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Use the User object to get the tradehook API key and email
-            pstmt.setString(1, user.getTradehookApiKey());
+            // Use the User object to get the webhooktrading API key and email
+            pstmt.setString(1, user.getWebhookTradingApiKey());
             pstmt.setString(2, user.getEmail());
 
             Integer result = pstmt.executeUpdate();

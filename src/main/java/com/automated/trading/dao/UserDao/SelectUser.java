@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.automated.trading.model.User;
 import com.automated.trading.util.DatabaseConnector;
 
@@ -28,11 +30,11 @@ public class SelectUser {
                 int id = rs.getInt(1);
                 String email = rs.getString(2);
                 String password = rs.getString(3);
-                String tradehookApiKey = rs.getString(4);
+                String webhooktradingApiKey = rs.getString(4);
                 String alapcaApiKey = rs.getString(5);
                 String alapcaSecretKey = rs.getString(6);
 
-                User user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
+                User user = new User(id,email,password,webhooktradingApiKey,alapcaApiKey,alapcaSecretKey);
                 users.add(user);
                 
             }
@@ -55,11 +57,11 @@ public class SelectUser {
             while (rs.next()) {
                 String email = rs.getString(2);
                 String password = rs.getString(3);
-                String tradehookApiKey = rs.getString(4);
+                String webhooktradingApiKey = rs.getString(4);
                 String alapcaApiKey = rs.getString(5);
                 String alapcaSecretKey = rs.getString(6);
 
-                user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
+                user = new User(id,email,password,webhooktradingApiKey,alapcaApiKey,alapcaSecretKey);
                 
             }
             return user;
@@ -82,11 +84,11 @@ public class SelectUser {
             while (rs.next()) {
                 Integer id = rs.getInt(1);
                 String password = rs.getString(3);
-                String tradehookApiKey = rs.getString(4);
+                String webhooktradingApiKey = rs.getString(4);
                 String alapcaApiKey = rs.getString(5);
                 String alapcaSecretKey = rs.getString(6);
 
-                user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
+                user = new User(id,email,password,webhooktradingApiKey,alapcaApiKey,alapcaSecretKey);
                 
             }
             return user;
@@ -115,12 +117,12 @@ public class SelectUser {
         }
     }
 
-    public User selectUserByTradehookApiKey(String tradehookApiKey) {
+    public User selectUserByWebhookTradingApiKey(String webhooktradingApiKey) {
         User user = null;
-        String sql = "SELECT * FROM User WHERE tradehookApiKey = ?";
+        String sql = "SELECT * FROM User WHERE webhooktradingApiKey = ?";
         try (Connection conn = databaseConnector.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, tradehookApiKey);
+            pstmt.setString(1, webhooktradingApiKey);
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -130,7 +132,7 @@ public class SelectUser {
                 String alapcaApiKey = rs.getString(5);
                 String alapcaSecretKey = rs.getString(6);
 
-                user = new User(id,email,password,tradehookApiKey,alapcaApiKey,alapcaSecretKey);
+                user = new User(id,email,password,webhooktradingApiKey,alapcaApiKey,alapcaSecretKey);
                 
             }
             return user;

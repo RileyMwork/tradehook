@@ -17,8 +17,8 @@
 <header>
     
     <button class="button" data-text="Awesome">
-        <span class="actual-text">&nbsp;Tradehook&nbsp;</span>
-        <span aria-hidden="true" class="hover-text">&nbsp;Tradehook&nbsp;</span>
+        <span class="actual-text">&nbsp;WebhookTrading&nbsp;</span>
+        <span aria-hidden="true" class="hover-text">&nbsp;WebhookTrading&nbsp;</span>
     </button>
     
     <form id="logout-form" action="/logout" method="get">
@@ -43,11 +43,11 @@
             </div>
         </div>
 
-        <div class="form-container" id="tradehook-api-container">
-            <div class="form-heading">Tradehook API Key</div>
-                <form action="" class="form-template" id="tradehook-api-form-template">
-                    <h3 id="tradehook-api-key">Loading API key...</h3>
-                    <button id="generate-tradehook-key-button" class="form-button btn gen-del-button" type="button">Regenerate</button>
+        <div class="form-container" id="webhooktrading-api-container">
+            <div class="form-heading">WebhookTrading API Key</div>
+                <form action="" class="form-template" id="webhooktrading-api-form-template">
+                    <h3 id="webhooktrading-api-key">Loading API key...</h3>
+                    <button id="generate-webhooktrading-key-button" class="form-button btn gen-del-button" type="button">Regenerate</button>
                     <!-- <button class="form-button btn gen-del-button" type="button">Delete</button> -->
                 </form>
             </div>
@@ -78,11 +78,11 @@
         <div class="guide-container">
             <p class="example-intro">Here is a simple snippet to help you start automating your trades through TradingView alerts</p>
             <!-- <img class="example-img" th:src="@{/images/example.PNG}" alt="example code snippet"> -->
-            <a href="/images/tradehook-img.png" target="_blank" rel="noopener">
-                <img class="example-img" src="/images/tradehook-img.png" alt="example code snippet" style="cursor: pointer;">
+            <a href="/images/webhooktrading-img.png" target="_blank" rel="noopener">
+                <img class="example-img" src="/images/webhooktrading-img.png" alt="example code snippet" style="cursor: pointer;">
             </a>
 
-            <p class="code-to-copy">alert('{"ticker": "' + syminfo.ticker + '", "qty": "' + str.tostring(qty) + '", "side": "buy","tradehookApiKey":"YOUR TRADEHOOK API KEY"}',freq=alert.freq_once_per_bar_close)</p>
+            <p class="code-to-copy">alert('{"ticker": "' + syminfo.ticker + '", "qty": "' + str.tostring(qty) + '", "side": "buy","webhooktradingApiKey":"YOUR TRADEHOOK API KEY"}',freq=alert.freq_once_per_bar_close)</p>
         </div>
     </main>
 

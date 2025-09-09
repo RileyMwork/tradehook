@@ -62,7 +62,7 @@ h3{
     align-items: center;
 }
 
-#tradehook-api-form-template{
+#webhooktrading-api-form-template{
     grid-template-columns: 1fr;
     gap: 5px;
 }
@@ -201,19 +201,19 @@ h3{
         width: 80dvw;
     }
 
-    #tradehook-api-form-template {
+    #webhooktrading-api-form-template {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 10px;
     }
 
-    #tradehook-api-form-template h3 {
+    #webhooktrading-api-form-template h3 {
         text-align: center;
         width: 100%;
     }
 
-    #tradehook-api-form-template .form-button {
+    #webhooktrading-api-form-template .form-button {
         width: 70%;
         max-width: 300px;
     }

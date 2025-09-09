@@ -24,7 +24,7 @@ public class InsertUserTests {
 
     private String testEmail;
     private String testPassword;
-    private String testTradehookApiKey;
+    private String testWebhookTradingApiKey;
     private String testAlpacaApiKey;
     private String testAlpacaSecretKey;
     private User userToInsert;
@@ -35,10 +35,10 @@ public class InsertUserTests {
     void setup() {
         testEmail = "insertTest1@email.com";
         testPassword = "password123";
-        testTradehookApiKey = "api-key-123";
+        testWebhookTradingApiKey = "api-key-123";
         testAlpacaApiKey = "alpaca-key-123";
         testAlpacaSecretKey = "alpaca-secret-key-123";
-        userToInsert = new User(testEmail, testPassword, testTradehookApiKey, testAlpacaApiKey, testAlpacaSecretKey);
+        userToInsert = new User(testEmail, testPassword, testWebhookTradingApiKey, testAlpacaApiKey, testAlpacaSecretKey);
         result = insertUser.insertUser(userToInsert);
         selected = selectUser.selectUserByEmail(testEmail);
     }
@@ -51,10 +51,10 @@ public class InsertUserTests {
     }
 
     @Test
-    public void insertUserReturnsOneAndCorrectTradehookApiKey() {
+    public void insertUserReturnsOneAndCorrectWebhookTradingApiKey() {
         assertEquals(1, result);
         assertNotNull(selected);
-        assertEquals(testTradehookApiKey, selected.getTradehookApiKey());
+        assertEquals(testWebhookTradingApiKey, selected.getWebhookTradingApiKey());
     }
 
     @Test

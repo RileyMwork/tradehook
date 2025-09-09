@@ -1,6 +1,9 @@
 package com.automated.trading.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class User {
@@ -13,7 +16,7 @@ public class User {
 
     private String password;
 
-    private String tradehookApiKey;
+    private String webhooktradingApiKey;
 
     private String alpacaApiKey;
 
@@ -38,26 +41,26 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String password, String tradehookApiKey, String alpacaApiKey, String alpacaSecretKey){
+    public User(String email, String password, String webhooktradingApiKey, String alpacaApiKey, String alpacaSecretKey){
         this.email = email;
         this.password = password;
-        this.tradehookApiKey = tradehookApiKey;
+        this.webhooktradingApiKey = webhooktradingApiKey;
         this.alpacaApiKey = alpacaApiKey;
         this.alpacaSecretKey = alpacaSecretKey;
     }
 
-    public User(String email, String tradehookApiKey, String alpacaApiKey, String alpacaSecretKey){
+    public User(String email, String webhooktradingApiKey, String alpacaApiKey, String alpacaSecretKey){
         this.email = email;
-        this.tradehookApiKey = tradehookApiKey;
+        this.webhooktradingApiKey = webhooktradingApiKey;
         this.alpacaApiKey = alpacaApiKey;
         this.alpacaSecretKey = alpacaSecretKey;
     }
 
-    public User(Integer id, String email, String password, String tradehookApiKey, String alpacaApiKey, String alpacaSecretKey) {
+    public User(Integer id, String email, String password, String webhooktradingApiKey, String alpacaApiKey, String alpacaSecretKey) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.tradehookApiKey = tradehookApiKey;
+        this.webhooktradingApiKey = webhooktradingApiKey;
         this.alpacaApiKey = alpacaApiKey;
         this.alpacaSecretKey = alpacaSecretKey;
     }
@@ -86,12 +89,12 @@ public class User {
         this.password = password;
     }
 
-    public String getTradehookApiKey() {
-        return tradehookApiKey;
+    public String getWebhookTradingApiKey() {
+        return webhooktradingApiKey;
     }
 
-    public void setTradehookApiKey(String tradehookApiKey) {
-        this.tradehookApiKey = tradehookApiKey;
+    public void setWebhookTradingApiKey(String webhooktradingApiKey) {
+        this.webhooktradingApiKey = webhooktradingApiKey;
     }
 
     public String getAlpacaApiKey() {
@@ -130,9 +133,9 @@ public class User {
             if (other.password != null) return false;
         } else if (!password.equals(other.password)) return false;
 
-        if (tradehookApiKey == null) {
-            if (other.tradehookApiKey != null) return false;
-        } else if (!tradehookApiKey.equals(other.tradehookApiKey)) return false;
+        if (webhooktradingApiKey == null) {
+            if (other.webhooktradingApiKey != null) return false;
+        } else if (!webhooktradingApiKey.equals(other.webhooktradingApiKey)) return false;
 
         if (alpacaApiKey == null) {
             if (other.alpacaApiKey != null) return false;
@@ -151,7 +154,7 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", tradehookApiKey='" + tradehookApiKey + '\'' +
+                ", webhooktradingApiKey='" + webhooktradingApiKey + '\'' +
                 ", alpacaApiKey='" + alpacaApiKey + '\'' +
                 ", alpacaSecretKey='" + alpacaSecretKey + '\'' +
                 '}';

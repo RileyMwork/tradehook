@@ -4,7 +4,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('/tradehook/authenticate-user', {
+    const response = await fetch('/authenticate-user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,7 +20,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
         errorMessageContainer.style.display = 'none';
 
         // Redirect on success
-        window.location.href = '/tradehook/home';
+        window.location.href = '/home';
     } else {
         // Show error
         const errorText = await response.text();

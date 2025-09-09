@@ -90,10 +90,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void selectValidUserByTradehookApiKeyReturnsValidUser() {
-        User createdUserWithKey = userService.selectUserByTradehookApiKey(validUser.getTradehookApiKey());
-        User createdUser = userService.selectUserByTradehookApiKey(createdUserWithKey.getTradehookApiKey());
-        assertEquals(validUser.getTradehookApiKey(), createdUser.getTradehookApiKey());
+    public void selectValidUserByWebhookTradingApiKeyReturnsValidUser() {
+        User createdUserWithKey = userService.selectUserByWebhookTradingApiKey(validUser.getWebhookTradingApiKey());
+        User createdUser = userService.selectUserByWebhookTradingApiKey(createdUserWithKey.getWebhookTradingApiKey());
+        assertEquals(validUser.getWebhookTradingApiKey(), createdUser.getWebhookTradingApiKey());
     }
 
     @Test
@@ -116,17 +116,17 @@ public class UserServiceTests {
     @Test
     public void updateValidUserAlpacaKeysReturnsUpdatedUser() {
         User userToUpdate = userService.selectUserByEmail(validUser);
-        User updatedUserInfo = new User(userToUpdate.getId(),userToUpdate.getEmail(),userToUpdate.getPassword(),userToUpdate.getTradehookApiKey(),"UPDATEDKEY","UPDATEDSCERETKEY");
+        User updatedUserInfo = new User(userToUpdate.getId(),userToUpdate.getEmail(),userToUpdate.getPassword(),userToUpdate.getWebhookTradingApiKey(),"UPDATEDKEY","UPDATEDSCERETKEY");
         User postUpdateUser = userService.updateAlpacaApiKeys(updatedUserInfo);
         assertEquals(updatedUserInfo, postUpdateUser);    
     }
 
     @Test
-    public void updateValidUserTradehookKeyReturnsUpdatedUser() {
+    public void updateValidUserWebhookTradingKeyReturnsUpdatedUser() {
         User userToUpdate = userService.selectUserByEmail(validUser);
-        String previousTradehookApiKey = validUser.getTradehookApiKey();
-        User postUpdateUser = userService.updateTradehookApiKey(userToUpdate);
-        assertNotEquals(postUpdateUser.getTradehookApiKey(),previousTradehookApiKey);    
+        String previousWebhookTradingApiKey = validUser.getWebhookTradingApiKey();
+        User postUpdateUser = userService.updateWebhookTradingApiKey(userToUpdate);
+        assertNotEquals(postUpdateUser.getWebhookTradingApiKey(),previousWebhookTradingApiKey);    
     }
 
     @Test

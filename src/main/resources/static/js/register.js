@@ -6,7 +6,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
     const alpacaApiKey = document.getElementById('alpaca-api-key').value;
     const alpacaSecretKey = document.getElementById('alpaca-secret-key').value;
 
-    const response = await fetch('/tradehook/user/create', {
+    const response = await fetch('/user/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,7 +20,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
     if (response.ok) {
         // Hide any existing error and redirect
         errorMessageContainer.style.display = 'none';
-        window.location.href = '/tradehook/home';
+        window.location.href = '/home';
     } else {
         const errorText = await response.text();
         errorTextElement.innerText = errorText;
